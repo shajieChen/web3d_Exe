@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1 Strict//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Axes</title>
+    <script type='text/javascript' src='../x3dom/x3dom.js'> </script>
+    <style type="text/css">
+      body { background-color:grey; }
+    </style>
+  </head>
+  <body>
+    <X3D xmlns="http://www.web3d.org/specifications/x3d-namespace" width="600px" height="600px">
+
+      <Scene>
+
+	<!-- Axes -->
+	<Shape DEF="Axes">
+	  <IndexedLineSet  
+	     coordIndex="0 1 -1 0 2 -1 0 3 -1"
+	     colorPerVertex="true"
+	     colorIndex="0 0 -1 1 1 -1 2 2 -1"
+	     >
+	    <Coordinate 
+	       point=
+	       "
+		0 0 0 
+		10 0 0 
+		0 10 0 
+		0 0 10  
+		"
+	       />
+	    <Color 
+	       color=
+	       "
+		1 0 0
+		0 1 0 
+                0 0 1 
+		"
+	       />
+	  </IndexedLineSet>
+	</Shape>
+	<Shape>
+		<PointSet>
+		  <Coordinate point=' 
+		 -1 -1  1
+		  1 -1  1
+		  1  1  1
+		 -1  1  1
+		 -1 -1 -1
+		 -1  1 -1
+		  1  1 -1
+		  1 -1 -1
+		 ' />
+		  <Color color='
+		  0 0 0,
+		  0 0 0,
+		  0 0 0,
+		  0 0 0, 
+		  0 0 0,
+		  0 0 0,
+		  0 0 0,
+		  0 0 0, ' />
+		</PointSet>
+<!--#region line  -->
+	  </Shape>
+	  <Shape>
+		<IndexedLineSet coordIndex="0 1 2 3 0 -1">
+			<Coordinate point="
+			-1 -1  1
+			1 -1  1
+			1  1  1
+		   -1  1  1"/>
+		</IndexedLineSet> 
+	  </Shape>
+	  <Shape>
+		<IndexedLineSet coordIndex="0 1 2 3 0 -1">
+			<Coordinate point="
+			-1 -1 -1
+			-1  1 -1
+			 1  1 -1
+			 1 -1 -1"/>
+		</IndexedLineSet> 
+	  </Shape>
+	  <Shape>
+		<IndexedLineSet coordIndex="0 1 2 3 0 -1">
+			<Coordinate point="
+			1 -1  1
+			1  1  1
+			1  1 -1
+			1 -1 -1"/>
+		</IndexedLineSet> 
+	  </Shape>
+	  <Shape>
+		<IndexedLineSet coordIndex="0 1 2 3 0 -1">
+			<Coordinate point="
+			1  1  1
+			-1  1  1
+			-1  1 -1
+			1  1 -1"/>
+		</IndexedLineSet> 
+	  </Shape>
+
+	  <Shape>
+		<IndexedLineSet coordIndex="0 1 2 3 0 -1">
+			<Coordinate point="
+			1 -1  1 
+			-1 -1  1
+			-1 -1 -1 
+			1 -1 -1"/>
+		</IndexedLineSet> 
+	  </Shape> 
+ <!--#endregion -->
+
+<!-- #region shape-->
+		<Shape>
+		<IndexedFaceSet
+			solid='false'
+			coordIndex='0 1 2 3 -1,
+						4 5 6 7 -1,
+						0 1 7 4 -1,
+						1 2 6 7 -1,
+						0 3 5 4  -1, 
+						2 3 5 6 -1
+						' >
+			<Coordinate point='
+			-1 -1  1
+			1 -1  1
+			1  1  1
+		   -1  1  1
+		   -1 -1 -1
+		   -1  1 -1
+			1  1 -1
+			1 -1 -1' />
+		</IndexedFaceSet>
+		</Shape>
+<!--#endregion-->
+	  </Scene> 
+    </X3D>
+  </body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1 Strict//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Axes</title>
+    <script type='text/javascript' src='../x3dom/x3dom.js'> </script>
+    <style type="text/css">
+      body { background-color:grey; }
+    </style>
+  </head>
+  <body>
+    <X3D xmlns="http://www.web3d.org/specifications/x3d-namespace" width="600px" height="600px">
+
+      <Scene>
+
+	<!-- Axes -->
+	<Shape DEF="Axes">
+	  <IndexedLineSet  
+	     coordIndex="0 1 -1 0 2 -1 0 3 -1"
+	     colorPerVertex="true"
+	     colorIndex="0 0 -1 1 1 -1 2 2 -1"
+	     >
+	    <Coordinate 
+	       point=
+	       "
+			0 0 0 
+			10 0 0 
+			0 10 0 
+			0 0 10  
+			"	
+	       />
+	    <Color 
+	       color=
+	       "
+				1 0 0
+				0 1 0 
+                0 0 1 
+		"
+	       />
+	  </IndexedLineSet>
+	</Shape> 
+
+<!-- Shoulder -->
+<Transform DEF="ShoulderAngle" rotation="0 0 1 0">
+	<!-- Upper Arm -->
+	<Transform translation="2 0 0">
+	  <Transform scale="2 0.5 0.5"> 	
+		  <IndexedFaceSet USE="Axes"></IndexedFaceSet>	  
+		<Shape>
+			  <PointSet>
+				<Coordinate point=' 
+			   -1 -1  1
+				1 -1  1
+				1  1  1
+			   -1  1  1
+			   -1 -1 -1
+			   -1  1 -1
+				1  1 -1
+				1 -1 -1
+			   ' />
+				<Color color='
+				0 0 0,
+				0 0 0,
+				0 0 0,
+				0 0 0, 
+				0 0 0,
+				0 0 0,
+				0 0 0,
+				0 0 0, ' />
+			  </PointSet> 
+		  </Shape>
+		<Shape>
+	  <Box/>
+	  <Appearance>
+		<Material/>
+	  </Appearance>
+		</Shape>
+	  </Transform>
+  
+	  <!-- Elbow -->
+	  <Transform translation="2 0 0">
+		<Transform DEF="ElbowAngle" rotation="0 0 1 0.785">
+  
+		<!-- Lower Arm -->
+	  <Transform translation="2 0 0">
+		<Transform scale="2 0.5 0.5">
+			<IndexedFaceSet USE="Axes"></IndexedFaceSet>	  
+		  <Shape>
+			<Box/>
+			<Appearance>
+			  <Material/>
+			</Appearance>
+		  </Shape>
+		</Transform>
+	  </Transform>
+  
+		</Transform>
+	  </Transform>
+  
+	</Transform>
+  </Transform>
+<!--#endregion--> 
+
+	  </Scene> 
+    </X3D>
+  </body>
+</html>
+
+

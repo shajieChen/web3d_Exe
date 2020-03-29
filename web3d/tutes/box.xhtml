@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <link rel="stylesheet" type="text/css" href="../x3dom/x3dom.css"/>
+    <script type="text/javascript" src="../x3dom/x3dom-full.js"/>
+    <link rel="stylesheet" type="text/css" href="./examples.css"/>
+  </head>
+  <body>
+    <X3D xmlns="http://www.web3d.org/specifications/x3d-namespace" width="300px" height="300px">
+      <Scene>
+
+	<!-- Axes -->
+	<Shape DEF="Axes">
+	  <IndexedLineSet  
+	     coordIndex=" 0 1 -1 0 2 -1 0 3 -1"
+	     colorPerVertex="true"
+	     colorIndex="0 0 -1 1 1 -1 2 2 -1">
+	    <Coordinate 
+	       point=
+	       "
+		0.0 0.0 0.0 
+		10.0 0.0 0.0 
+		0.0 10.0 0.0 
+		0.0 0.0 10.0
+		"
+	       />
+	    <Color color="1.0 0.0 0.0, 0.0 1.0 0.0, 0.0 0.0 1.0" />
+   	  </IndexedLineSet>
+	</Shape>
+
+	<Transform DEF="ShoulderAngle" rotation="0 0 1 0">
+  <!-- Upper Arm -->
+        <Transform translation="0 0 0">  
+            <!-- Elbow -->
+            <Transform translation="0 0 0">
+            <Transform DEF="ElbowAngle" rotation="0 0 1 0.785">
+            <TouchSensor DEF='StartStop'/>
+
+            <!--  upper arm -->
+            <Transform>
+            <Transform translation="2 0 0">
+            <Transform scale="2 1 1">
+                <IndexedFaceSet USE="Axes"></IndexedFaceSet>	  
+                <Shape>
+                <Box/>
+                <Appearance>
+                    <Material/>
+                </Appearance>
+                </Shape> 
+            </Transform>
+            </Transform>
+            </Transform>
+
+            <!-- Lower arm --> 
+            <Transform translation="3 3 0">
+            <Transform DEF = "LowerArm" rotation = " 0 0 1">
+            <Transform scale="1 2 1">
+                <IndexedFaceSet USE="Axes"></IndexedFaceSet>	  
+                <Shape>
+                <Box/>
+                <Appearance>
+                    <Material/>
+                </Appearance>
+                </Shape> 
+            </Transform>
+            </Transform>
+            </Transform> 
+
+
+            </Transform>
+            </Transform>
+
+        </Transform>
+    </Transform> 
+<textarea>/*the cycleInterval is set to. Change the cycleInterval to 16. Does it take 16 seconds? 用于修改整体运行时间*/</textarea>
+	<TimeSensor
+	  DEF="AngleTimer"
+	  cycleInterval='8'
+	  loop='true'
+	  enabled='false'/>
+    <br/>
+    
+   <textarea>   As in exercise 1, use a TimeSensor OrientationInterpolator and a Route to animate the upper arm, spinning it at one rotation per second.</textarea>
+
+
+	<OrientationInterpolator
+	  DEF = "Animation"
+	  key = '0 0.5  1' 
+	  keyValue =
+	  '
+	   0 0 1 0  
+	   0 0 1 3.14 
+	   0 0 1 6.28'/>
+    <OrientationInterpolator
+        DEF = "AnimtionaOfLowerArm"
+        key = "0 0.5 1 "
+        keyValue = 
+        '
+        0 0 1 -3.14  
+        0 0 1 -4.2
+        0 0 1 3.14
+    '/>
+    <ROUTE                                                                  
+        fromNode='StartStop'                                                 
+        fromField='isActive'                                               
+        toNode='AngleTimer'                                                
+        toField='enabled'                                                  
+    />
+	<ROUTE 
+	   fromNode = "AngleTimer" 
+	   fromField = "fraction_changed" 
+	   toNode = "Animation"  
+	   toField = "set_fraction" 
+	   />
+	<ROUTE 
+	   fromNode = "Animation" 
+	   fromField = "value_changed" 
+	   toNode = "ElbowAngle"  
+	   toField = "set_rotation" 
+	  />
+
+      <ROUTE 
+	   fromNode = "AngleTimer" 
+	   fromField = "fraction_changed" 
+	   toNode = "AnimtionaOfLowerArm"  
+	   toField = "set_fraction" 
+	   />
+	<ROUTE 
+	   fromNode = "AnimtionaOfLowerArm" 
+	   fromField = "value_changed" 
+	   toNode = "LowerArm"  
+	   toField = "set_rotation" 
+	  />
+
+      </Scene>
+    </X3D>
+  </body>
+</html>
+

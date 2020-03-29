@@ -1,0 +1,17 @@
+其他代码
+
+正方体绘制
+	
+	<Transform DEF="Angle" rotation="0 0 1 0">
+	  
+	  <!-- Object axes -->
+	  <Shape USE="Axes"/>
+ 	  <!-- Box -->
+	     <Shape>
+	    <Box/>
+	    <Appearance>
+	      <Material diffuseColor="1 1 0"/>
+	    </Appearance>
+	  </Shape>
+    
+	</Transform>  

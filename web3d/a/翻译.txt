@@ -4,9 +4,15 @@ Web3D赋值1
 类型:个人
 提交:帆布
 主题:亚瑟游泳使用X3D!
-概述
+概述n 
+this assignment, you will write an X3D scene embedded in an html file using the X3Dom library to draw a hierarchical model of a swimmer model made up of simple polygon mesh shapes: 
+	octahedrons (polyhedron with 8 faces, also known simply as diamonds) for legs and arms, 
+	pentahedrons (square pyramid polyhedron with 5 faces) for feet and hands and 
+	a decahedron (polyhedron with 10 faces,and more specifically a pentagonal bipyramid) for the body. 
+The model will need to perform a swimming animation, similar to the image and video above.
 在这个任务中,您将编写一个X3D场景嵌入在一个html文件使用X3Dom库画一个游泳者模型的层次结构模型由简单的多边形网格形状:
-		八面体(多面体和8的脸,也简称为钻石)腿和手臂,五面体(与5面临广场金字塔多面体)手脚和十面体(多面体10的脸,更具体地说是五角双锥体)的身体。
+		八面体(多面体和8的脸,也简称为钻石)腿和手臂,五面体(与5面临广场金字塔多面体)手脚和
+		十面体(多面体10的脸,更具体地说是五角双锥体)的身体。
 		该模型将需要执行一个游泳动画，类似于上面的图像和视频。
 本教程将教授作业构建所需的基础知识，建议您遵循教程练习。这项作业占这门课期末成绩的25%。
 本课程后期的作业将以本作业中所提出的观点为基础。在这次作业中表现良好，将使未来的作业更容易理解和完成。

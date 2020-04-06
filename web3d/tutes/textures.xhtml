@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN'
+'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <title>Tute Texturing: Solution</title>
+    <link rel='stylesheet' type='text/css' href='../x3dom/x3dom.css' />
+    <script type='text/javascript' src='../x3dom/x3dom-full.js'>
+    </script>
+    <style>body {background:white;></style>
+  </head>
+  <body>
+    <X3D xmlns='http://www.web3d.org/specifications/x3d-namespace'  width='500px' height='500px'>
+	<Scene> 
+	<Viewpoint position='0 0 5'/>
+	
+	<!-- Axes -->
+	<Shape >
+	  <IndexedLineSet
+	      DEF='axes' 
+	      coordIndex=' 0 1 -1 0 2 -1 0 3 -1'
+	      colorPerVertex='true'
+	      colorIndex='0 0 -1 1 1 -1 2 2 -1'>
+            <Coordinate point='0 0 0, 2 0 0, 0 2 0, 0 0 2'/>
+            <Color color='1 0 0, 0 1 0, 0 0 1'/>
+	  </IndexedLineSet>
+	</Shape>
+
+
+	<!-- Sphere -->
+	<Shape>
+	  <Sphere/>
+	  <Appearance>
+	    <Material/>
+	    <ImageTexture url='./2k_earth_daymap.jpg'/>
+	  </Appearance>
+	</Shape>
+
+      </Scene>
+    </X3D>
+  </body>
+</html> 
+
+<!--	  
+    <ImageTexture url='./textures/uv_grid.jpg'/>
+-->
+

@@ -41,7 +41,7 @@
 
 
 	<!-- Swimmer Diagram  -->
-	<Transform DEF="Swimmer">  
+	<Transform DEF="Swimmer" >  
 		<!-- STorsoBODY  -->
 		<Transform DEF ="TorsoBODY" translation = "0 0 0" >
 			<!-- JOIN --> 
@@ -133,7 +133,7 @@
 		</Transform>
 
 		<!-- LEFTARM -->
-		<Transform  DEF = "LEFTARM" translation = "-0.9510 0.3090 0 "> 
+		<Transform  DEF = "LEFTARM" translation = "-0.9510 0.3090 0 " rotation="0 0 1 1.57"> 
 			<!--  HIPTHIGH --> 
 			<Transform DEF="HIPTHIGH" translation = "0 0 0"> 
 				<!-- JOIN --> 
@@ -182,7 +182,7 @@
 		</Transform> 
 
 		<!-- RIGHTARM -->
-		<Transform  DEF = "RIGHTARM" translation = "0.9510 0.3090 0 "> 
+		<Transform  DEF = "RIGHTARM" translation = "0.9510 0.3090 0 " rotation="0 0 -1 1.57"> 
 		<!--  HIPTHIGH --> 
 		<Transform DEF="HIPTHIGH" translation = "0 0 0"> 
 			<!-- JOIN --> 
@@ -328,16 +328,35 @@
 		</Transform> 
 
 	</Transform>
-
  
-	<Transform  DEF="boxTrafo" center="0,0,0" rotation="0,0,0,0" scale="5,5,5" scaleOrientation="0,0,0,0">
-		<Shape DEF="boxShape">
-			<Box DEF="box" solid="true" ccw="false" useGeoCache="true"  size="2,2,2"/>
-			<Appearance>
-			<Material diffuseColor='1.0 0.0 0.0'/>
-			</Appearance>
+	<Transform DEF="BACKGROUND" center="0,0,0" rotation="0,0,0,0" scale="5,5,5" scaleOrientation="0,0,0,0">
+		<Shape  DEF="box">
+		<IndexedFaceSet
+			DEF="box" solid="true" ccw="false" useGeoCache="true" 
+			coordIndex='0 1 2 3 -1,
+						4 5 6 7 -1,
+						1 0 4 7 -1,
+						7 6 2 1 -1,
+						0 3 5 4 -1, 
+						6 5 3 2 -1
+						' >
+			<Coordinate point='
+			-1 -1  1
+			1 -1  1
+			1  1  1
+		   -1  1  1
+		   -1 -1 -1
+		   -1  1 -1
+			1  1 -1
+			1 -1 -1' />
+		</IndexedFaceSet>
+		<Appearance>
+			<ImageTexture url='http://titan.csit.rmit.edu.au/~e20068/teaching/w3d/ass1/tiles.jpg'/>
+			<Material diffuseColor='0.2 0.2 0.2'/>
+		</Appearance>
 		</Shape>
-	</Transform> 
+	</Transform>
+
 
 	<timeSensor DEF="time" cycleInterval="2" loop="true"></timeSensor>
 	<PositionInterpolator DEF="move" key="0 0.5 1" keyValue="0 0 0  0 3 0  0 0 0"></PositionInterpolator>    
@@ -349,10 +368,8 @@
     <Route fromNode="leftRotate" fromField ="value_changed" toNode="ANKLEFOOT" toField="set_rotation"></Route>
 	<Route fromNode="AnimtionaOfLowerArm" fromField ="value_changed" toNode="KNEECALF" toField="set_rotation"></Route>
 	<Route fromNode="AnimtionaOfLowerArm" fromField ="value_changed" toNode="HIPTHIGH" toField="set_rotation"></Route>
-
-	
-	<p><Route fromNode="move" fromField ="value_changed" toNode="ANKLEFOOT" toField="translation"></Route>
-		</p>
+ 
+ 
       </Scene>
     </X3D>
   </body>

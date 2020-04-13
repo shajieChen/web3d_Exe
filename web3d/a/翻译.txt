@@ -1,3 +1,14 @@
+Web3D Assignment 1
+
+Due Date: Fri 10th 17th April 9pm
+
+Assessment: 30% 33%
+
+Type: Individual
+
+Submission: Canvas
+
+Theme: Arthur the Swimmer using X3D!
 Web3D赋值1
 截止日期:4月10日星期五晚上9点
 评价:30%
@@ -22,19 +33,45 @@ The model will need to perform a swimming animation, similar to the image and vi
 下图显示了示例解决方案的泳者模型的尺寸，可以作为您的作业指南。你不必严格遵循这些维度。
 
 
-1. 这个人物应该包括一个躯干，一个头部，两条胳膊和两条腿，由三部分组成。
-	躯干是十面体，头、腿和手臂由八面体构成，脚和手由金字塔构成。
+The figure should consist of a torso, a head, 
+and two arms and two legs made of three segments. 
+The torso is a decahedron, the head, legs and arms made from octahedrons and the feet and hands from pyramids.
+ Eyes as spheres. The figure also has a green swim cap and bathers.
+1. 这个人物应该包括一个躯干，一个头部，两条胳膊和两条腿，由三部分组成。躯干是十面体，
+头、腿和手臂由八面体构成，脚和手由金字塔构成。眼睛像球体。这个人物还有一顶绿色的泳帽和游泳者。
 
+You will create polygon mesh shapes for the body segments using the IndexedFaceSet X3D node. 
+To show the joints, sometimes also called pivot points, transform nodes should include a set of axes as one of their children. 
+An optional extra is to provide the ability to enable/disable rendering them using e.g. a touch sensor node.
 2. 您将使用IndexedFaceSet X3D节点为主体段创建多边形网格形状。
 	为了显示关节(有时也称为轴心点)，转换节点应该包含一组轴，作为它们的子节点之一。
 	一个可选的额外功能是提供启用/禁用渲染功能，例如使用触摸传感器节点。
-
+You will create a pool for the swimmer made with either planes or custom geometry using an indexed face set, 
+that has a semi-transparent plane for the water. The pool floor and walls are to be textured, using this tile texture
 3. 您将为游泳者创建一个用平面或自定义几何图形创建的游泳池，其中有一个半透明的水面。
+
+The X3D 'USE' and 'DEF' elements should be applied to minimise duplicate markup/code in the file.
 4. X3D的‘USE’和‘DEF’元素应该应用到文件中，以减少重复的标记/代码。
+
+Proper transforms including scale/rotation/translation should be applied 
+to minimise the number of IndexedFaceSets that are defined.
 5. 适当的转换，包括缩放/旋转/平移，应尽量减少已定义的索引面集的数量。
+
+
+The figure should be properly constructed according to a hierarchy/scene graph with the torso attached to the swimmer root, head,
+ legs and arms attached to the torso by neck, shoulder and hip joints,
+  lower legs and arms attached to upper arms and arms by knee and elbow joints and feet and hands attached to lower legs and arms by ankles and wrists.
+   Each joint will require transform nodes, and should have a set of axes.
 6. 图应该显示正确构造层次/场景图的躯干游泳根,头,腿和手臂与躯干的脖子、肩膀和臀部关节,小腿和手臂在上臂和手臂,膝盖和肘部关节和脚和手附在小腿脚踝和手腕和手臂。
 	每个关节都需要一个转换节点，并且应该有一组轴。
+
+
+Proper colouring should be applied using the Appearance and Material X3D elements.
 7. 正确的着色应该使用外观和材料X3D元素。
+
+
+The swimming animation should be like the above video. 
+A simple animation will have the legs moving and the arms spinning around, whereas a complex animation will include the elbow, wrist and knee joints also rotating.
 8. 游泳的动画应该像上面的视频一样。
 	一个简单的动画会有腿移动和手臂旋转，而一个复杂的动画会包括肘关节，手腕和膝关节也旋转。
 
@@ -58,19 +95,34 @@ The model will need to perform a swimming animation, similar to the image and vi
 标题/标记指导
 
 特性实现的好坏将决定一个赋值是在其标记的上下限范围内。
-
+PA:
+Swimmer with torso and limbs displayed as described using indexed face sets.
+Pool and a background node.
+Static model, i.e. no animation.
 PA:
 躯干和四肢显示的游泳者，描述了一个游泳池和一个背景节点。
+CR:
+Use of colour.
+Texture mapped pool.
+Reduced code duplication via proper use of 'DEF' and 'USE' tags.
 克雷格:
 使用的颜色。
 通过正确使用“use”和“DEF”标签减少代码重复。
+DI:
+Basic animation, e.g. straight arm rotation at shoulder only.
 迪:
 使用索引的脸集来创建钻石形状。
 基本的动画。
+HD:
+A correctly constructed hierarchy/scene graph.
+Complex animation including joint rotations.
+TouchSensor for starting and stopping animation.
+Cap and bathers.
 高清:
 一个正确构建的层次结构/场景图。
 包括关节旋转的复杂动画。
-课程学习目标与成果
+用于启动和停止动画的触摸传感器。
+帽和游泳者。
 
 本作业涉及以下课程的学习目标和结果
 

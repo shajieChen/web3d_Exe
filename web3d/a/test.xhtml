@@ -10,41 +10,43 @@
     <X3D xmlns="http://www.web3d.org/specifications/x3d-namespace" width="300px" height="300px">  
 
 	<Scene>
+		<Viewpoint DEF='DefaultPositionLeft7Degrees' description='7 degree towards left'  
+				position="3.0 0.0 -11"
+            orientation='0 1 0 2.9' fieldOfView='0.7854'/>  
 	<!-- PreDefineTheGeomotry -->  
 		<!-- Axes -->
-		<Shape DEF="Axes" on = 'false'>
-		<IndexedLineSet  
-			coordIndex="0 1 -1 0 2 -1 0 3 -1"
-			colorPerVertex="true"
-			colorIndex="0 0 -1 1 1 -1 2 2 -1"
-			>
-			<Coordinate 
-			point=
-			"
-			0 0 0 
-			10 0 0 
-			0 10 0 
-			0 0 10  
-			"
-			/>
-			<Color 
-			color=
-			"
-			1 0 0
-			0 1 0 
-					0 0 1 
-			"
-			/>
-		</IndexedLineSet>
-		</Shape>   
-		  
+		<Transform DEF="Axes" scale = "0.2 0.2 0.2" translate="0 0 0 " >
+			<Shape  >
+			<IndexedLineSet  
+				coordIndex="0 1 -1 0 2 -1 0 3 -1"
+				colorPerVertex="true"
+				colorIndex="0 0 -1 1 1 -1 2 2 -1"
+				>
+				<Coordinate 
+				point=
+				"
+				0 0 0 
+				10 0 0 
+				0 10 0 
+				0 0 10  
+				"
+				/>
+				<Color 
+				color=
+				"
+				1 0 0
+				0 1 0 
+				0 0 1 
+				"
+				/>
+			</IndexedLineSet> 
+			</Shape>   
+		</Transform>
 
 
 	<!-- Swimmer Diagram  -->
 	<Transform DEF="Swimmer" >  
-		<TouchSensor DEF='StartStop'>
-			
-		</TouchSensor>
+		<TouchSensor DEF='StartStop'></TouchSensor>
 		<!-- STorsoBODY  -->
 		<Transform DEF ="TorsoBODY" translation = "0 0 0" >
 			<!-- JOIN --> 
@@ -332,39 +334,27 @@
 	</Transform>
  
 	<Transform DEF="BACKGROUND" center="0,0,0" rotation="0,0,0,0" scale="5,5,5" scaleOrientation="0,0,0,0">
-		<Shape  DEF="box">
-		<IndexedFaceSet
-			DEF="box" solid="true" ccw="false" useGeoCache="true" 
-			coordIndex='0 1 2 3 -1,
-						4 5 6 7 -1,
-						1 0 4 7 -1,
-						7 6 2 1 -1,
-						0 3 5 4 -1, 
-						6 5 3 2 -1
-						' >
-			<Coordinate point='
-			-1 -1  1
-			1 -1  1
-			1  1  1
-		   -1  1  1
-		   -1 -1 -1
-		   -1  1 -1
-			1  1 -1
-			1 -1 -1' />
-		</IndexedFaceSet>
+		<shape> 
+		<appearance> 
+			<ImageTexture url='./tiles.jpg'/>
+		</appearance> 
+		<box  solid="true" ccw="false"> </box> 
+		</shape> 
+	</Transform> 
+	<Transform rotation="1, 0,0,1.57">
+		<Shape>
+		<IndexedFaceSet solid='false' coordIndex='0 1 2 3 4 -1'>
+		<Coordinate point='5.0 0 5.0 5.0 0 -5.0 -5.0 0 -5.0 -5.0 0 5.0 5.0 0 5.0'/>
+		</IndexedFaceSet> 
 		<Appearance>
-			<ImageTexture url='http://titan.csit.rmit.edu.au/~e20068/teaching/w3d/ass1/tiles.jpg'/>
-			<Material diffuseColor='0.2 0.2 0.2'/>
+		<Material diffuseColor='0.27 0.51 0.71' transparency='.5'/>
 		</Appearance>
 		</Shape>
-	</Transform>
+	</Transform>   
+  
+	<timeSensor DEF="time" cycleInterval="2" loop="true" enabled='true'></timeSensor>   
 
-
-	<timeSensor DEF="time" cycleInterval="2" loop="true" enabled='true'></timeSensor>
-
-	<!-- StartAndStop || OpenPrepare-->   
-
-
+	<ScalarInterpolator DEF = "test" key = "0 1 " keyValue = '1 1 1 1 1 1'/>  
 
 	<!-- ANIMATIONOfLeg --> 
 		<!-- AnimOfLeftLeg --> 
@@ -420,8 +410,7 @@
 		<OrientationInterpolator DEF = "AnimOfHead" key = "0 0.25 0.5 0.75 1 " keyValue = '0 0 0 0 0 1 0 1.57 1 0 1.57 0 1 0 1.57 0 0 0 0 '/>
         <Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfHead" toField="set_fraction"></Route>
         <Route fromNode="AnimOfHead" fromField ="value_changed" toNode="NeekHeadEye" toField="set_rotation"></Route>
-		
-
+		 
       </Scene>
     </X3D>
   </body>

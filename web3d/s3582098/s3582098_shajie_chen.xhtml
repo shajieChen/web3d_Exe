@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <link rel="stylesheet" type="text/css" href="../x3dom/x3dom.css"/>
+    <script type="text/javascript" src="../x3dom/x3dom-full.js"/>
+    <link rel="stylesheet" type="text/css" href="./examples.css"/>
+  </head>
+  <body>
+    <X3D xmlns="http://www.web3d.org/specifications/x3d-namespace" width="300px" height="300px">  
+
+	<Scene>
+		<Viewpoint DEF='DefaultPositionLeft7Degrees' description='7 degree towards left'  
+				position="3.0 0.0 -11"
+            orientation='0 1 0 2.9' fieldOfView='0.7854'/>  
+	<!-- PreDefineTheGeomotry -->  
+		<!-- Axes -->
+		<Transform DEF="Axes" scale = "0.2 0.2 0.2" >
+			<Shape  >
+			<IndexedLineSet  
+				coordIndex="0 1 -1 0 2 -1 0 3 -1"
+				colorPerVertex="true"
+				colorIndex="0 0 -1 1 1 -1 2 2 -1"
+				>
+				<Coordinate 
+				point=
+				"
+				0 0 0 
+				10 0 0 
+				0 10 0 
+				0 0 10  
+				"
+				/>
+				<Color 
+				color=
+				"
+				1 0 0
+				0 1 0 
+				0 0 1 
+				"
+				/>
+			</IndexedLineSet> 
+			</Shape>   
+		</Transform>
+
+
+	<!-- Swimmer Diagram  -->
+	<Transform DEF="Swimmer" >  
+		<TouchSensor DEF='StartStop'></TouchSensor>
+		<!-- STorsoBODY  -->
+		<Transform DEF ="TorsoBODY" translation = "0 0 0" >
+			<!-- JOIN --> 
+			<Transform DEF="Torso" scale="0.5 0.5 0.5"><IndexedFaceSet USE="Axes"></IndexedFaceSet></Transform> 
+			<!-- Body -->
+			<Shape DEF='PentagonalPyramid'>
+					<!-- decahedron -->
+					<IndexedFaceSet solid='false' coordIndex='0 1 2 3 4 5 -1 0 1 6 -1  0 1 7 -1 1 2 6 -1 1 2 7 -1 2 3 6 -1  2 3 7 -1  3 4 6 -1  3 4 7 -1 4 0 6 -1 4 0 7 -1
+															8 10 15 -1 
+															8 11 15 -1
+															11 13 14 15 -1
+															9 13 14 -1
+															12 9 14 -1
+															10 12 14 15 -1 8 10 15 -1' >
+					<Coordinate point='0 1 0  
+									0.9510 0.3090 0.0
+									0.5877 -0.8090 0.0
+									-0.5877 -0.8090 0.0
+									-0.9510 0.3090 0.0
+									0 0 0
+									0 0 -0.5
+									0 0 0.5
+									-0.7793 -0.25 0
+									0.7793 -0.25 0
+									-0.2938 -0.4045 -0.26
+									-0.2938 -0.4045 0.26
+									0.2938 -0.4045 -0.26
+									0.2938 -0.4045 0.26
+									0.5877 -0.8190 0.0
+									-0.5877 -0.8190 0.0'/>
+					<Color color='1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0
+					0 0.5 0
+					0 0.5 0
+					0 0.5 0
+					0 0.5 0
+					0 0.5 0
+					0 0.5 0
+					0 0.5 0
+					0 0.5 0'/> 
+					</IndexedFaceSet> 
+					<Appearance> <Material diffuseColor='1.0 0.0 0.0'/> </Appearance>
+			</Shape>
+		</Transform>
+
+		<!-- NeekHeadEye -->
+		<Transform DEF ="NeekHeadEye" translation = "0 1 0" >
+			<!-- JOIN --> 
+			<Transform DEF="NEEK" scale="0.5 0.5 0.5"><IndexedFaceSet USE="Axes"></IndexedFaceSet></Transform> 
+			<!-- HEAD --> 	
+			<Transform DEF="Head" translation = "0 0.5 0">
+				<Shape DEF='Octahedron'>
+						<IndexedFaceSet solid='false' 
+										coordIndex='0 1 2 -1 0 2 3 -1 0 3 4 -1 0 1 4 -1 5 1 4 -1 5 4 3 -1 5 3 2 -1 5 2 1 -1
+                                10 6 8 -1 10 9 6 -1 10 7 9 -1 10 8 7 -1
+													' >
+						<Color color='1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0
+									0 0.5 0
+									0 0.5 0
+									0 0.5 0
+									0 0.5 0
+									0 0.5 0'/> 
+						<Coordinate point='0.5 0 0 0 0.5 0 0 0 0.5 0 -0.5 0 0 0 -0.5 -0.5 0 0 
+											0.25 0.26 0
+										   -0.25 0.26 0
+										    0    0.25 -0.26
+										    0    0.25  0.26 
+											0 0.5 0'/> 
+						</IndexedFaceSet> 
+						<Appearance> <Material diffuseColor='1.0 0.0 0.0'/> </Appearance>
+				</Shape>
+				<!-- Eye -->
+				<Transform DEF="Eyes" scale = "1 1 1" >
+					<!-- LeftEye -->
+					<Transform DEF="LEye" scale = "0.1 0.1 0.1" translation = "0.15 0.15 0.1">
+						<Shape>
+						<Sphere radius='1.0'/> 
+						<Appearance> <Material diffuseColor='0.0 0.0 1.0'/> </Appearance>
+						</Shape>
+					</Transform>
+					<!-- RightEye -->
+					<Transform DEF="REye" scale = "0.1 0.1 0.1" translation = "-0.15 0.15 0.1" >
+						<Shape>
+						<Sphere radius='1.0'/> 
+						<Appearance> <Material diffuseColor='0.0 0.0 1.0'/> </Appearance>
+						</Shape>
+					</Transform>
+				</Transform>
+			</Transform>
+		</Transform>
+
+		<!-- LEFTARM --> 
+		<Transform  DEF = "LEFTARM" translation = "-0.9510 0.3090 0 " > 
+			<!--  SHOULDERUPPERARM --> 
+			<Transform DEF="LeftShoulderUpperArm" translation = "0 0 0"> 
+				<!-- JOIN --> 
+				<Transform DEF="Shoulder" scale="0.5 0.5 0.5">
+				<IndexedFaceSet USE="Axes"></IndexedFaceSet>
+				</Transform> 
+				<!-- UpperArm --> 
+				<Transform DEF="LeftUpperArm" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1 1 1">
+					<Shape DEF='SamllOctahedron'>
+					<IndexedFaceSet solid='false' coordIndex='0 1 2 -1 0 2 3 -1 0 3 4 -1 0 4 1 -1 5 1 4 -1 5 4 3 -1 5 3 2 -1 5 2 1 -1'>
+					<Coordinate point='0.3  0  0 0  0.3  0 0  0  0.5 0 -0.3  0 0  0 -0.5 -0.3  0  0'/>
+					</IndexedFaceSet> 
+					<Appearance>
+					<Material diffuseColor='1.0 0.0 0.0'/>
+					</Appearance>
+					</Shape>
+				</Transform>
+
+				<!-- LEFTELBOWForceArm --> 
+				<Transform DEF="LeftElbowForceArm" translation = "0 1.0 0"> 
+					<!-- JOIN --> 
+					<Transform DEF="LeftElbow" scale="0.5 0.5 0.5"><IndexedFaceSet USE="Axes"></IndexedFaceSet></Transform> 
+					<!-- CALF --> 
+					<Transform DEF="LeftForceArm" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1.0 1.0 1">
+						<IndexedFaceSet USE="SamllOctahedron"></IndexedFaceSet>
+					</Transform> 
+
+					<!-- LeftWristHand --> 
+					<Transform DEF="LeftWristHand" translation = "0 1 0"> 
+						<!-- JOINT --> 
+						<Transform DEF="LeftWrist" scale="0.5 0.5 0.5"><IndexedFaceSet USE="Axes"></IndexedFaceSet> </Transform> 
+						<!-- HANDFOOT --> 
+						<Transform DEF="LeftHand" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1.0 1.0 1">
+						<Shape DEF='pyramid'>  
+							<IndexedFaceSet solid='false' coordIndex='  0 1 2 -1 0 2 3 -1 1 0 3 -1 1 5 3 -1 1 5 2 -1 5 2 3 -1'>
+							<Coordinate point='0.3  0  0 0  0.3  0 0  0  0.5 0 -0.3  0 0  0 -0.5 -0.3  0  0'/>
+							</IndexedFaceSet> 
+							<Appearance>
+							<Material diffuseColor='1.0 0.0 0.0'/>
+							</Appearance>
+						</Shape> 
+						</Transform> 
+					</Transform>
+				</Transform>
+			</Transform>   
+		</Transform>  
+
+		<!-- RIGHTARM -->  
+		<Transform  DEF = "RIGHTARM" translation = "0.9510 0.3090 0 " > 
+		<!--  RightShoulderUpperArm --> 
+		<Transform DEF="RightShoulderUpperArm" translation = "0 0 0"> 
+			<!-- JOIN --> 
+			<Transform DEF="RightShoulder" scale="0.5 0.5 0.5">
+			<IndexedFaceSet USE="Axes"></IndexedFaceSet>
+			</Transform> 
+			<!-- THIGH --> 
+			<Transform DEF="RightUpperArm" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1 1 1">
+				<IndexedFaceSet USE="SamllOctahedron"></IndexedFaceSet>
+			</Transform>
+
+			<!-- RightElbowForceArm --> 
+			<Transform DEF="RightElbowForceArm" translation = "0 1.0 0"> 
+				<!-- JOIN --> 
+				<Transform DEF="RightElbow" scale="0.5 0.5 0.5"><IndexedFaceSet USE="Axes"></IndexedFaceSet></Transform> 
+				<!-- CALF --> 
+				<Transform DEF="RightForceArm" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1.0 1.0 1">
+					<IndexedFaceSet USE="SamllOctahedron"></IndexedFaceSet>
+				</Transform> 
+
+				<!-- RightWristHand --> 
+				<Transform DEF="RightWristHand" translation = "0 1 0"> 
+					<!-- JOINT --> 
+					<Transform DEF="RightWrist" scale="0.5 0.5 0.5"><IndexedFaceSet USE="Axes"></IndexedFaceSet> </Transform> 
+					<!-- HANDFOOT --> 
+					<Transform DEF="RightHand" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1.0 1.0 1">
+					<IndexedFaceSet USE="pyramid"></IndexedFaceSet>
+					</Transform> 
+				</Transform>
+		</Transform>
+		</Transform>   
+		</Transform>  
+		<!-- LEFTLEG -->
+		<Transform  DEF = "LEFTLEG" translation = "-0.5877 -0.8090 0 " scale = "1 -1 1"> 
+		<!--  HIPTHIGH --> 
+		<Transform DEF="LeftHIPTHIGH" translation = "0 0 0"> 
+			<!-- JOIN --> 
+			<Transform DEF="HIP" scale="0.5 0.5 0.5">
+			<IndexedFaceSet USE="Axes"></IndexedFaceSet>
+			</Transform> 
+			<!-- THIGH --> 
+			<Transform DEF="THIGH" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1 1 1">
+				<IndexedFaceSet USE="SamllOctahedron"></IndexedFaceSet>
+			</Transform>
+
+			<!-- KNEECALF --> 
+			<Transform DEF="LeftKNEECALF" translation = "0 1.0 0"> 
+				<!-- JOIN --> 
+				<Transform DEF="KNEE" scale="0.5 0.5 0.5"><IndexedFaceSet USE="Axes"></IndexedFaceSet></Transform> 
+				<!-- CALF --> 
+				<Transform DEF="CALF" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1.0 1.0 1">
+					<IndexedFaceSet USE="SamllOctahedron"></IndexedFaceSet>
+				</Transform> 
+
+				<!-- ANKLEFOOT --> 
+				<Transform DEF="LeftANKLEFOOT" translation = "0 1 0"> 
+					<!-- JOINT --> 
+					<Transform DEF="ANKLE" scale="0.5 0.5 0.5"><IndexedFaceSet USE="Axes"></IndexedFaceSet> </Transform> 
+					<!-- HANDFOOT --> 
+					<Transform DEF="HANDFOOT" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1.0 1.0 1">
+						<IndexedFaceSet USE="pyramid"></IndexedFaceSet>
+					</Transform> 
+				</Transform>
+		</Transform>
+		</Transform>   
+		</Transform> 
+
+		<!-- RIGHTLEG -->
+		<Transform  DEF = "RIGHTLEG" translation = "0.5877 -0.8090 0 " scale = "1 -1 1"> 
+			<!--  HIPTHIGH --> 
+			<Transform DEF="RightHIPTHIGH" translation = "0 0 0"> 
+				<!-- JOIN --> 
+				<Transform DEF="HIP" scale="0.5 0.5 0.5">
+				<IndexedFaceSet USE="Axes"></IndexedFaceSet>
+				</Transform> 
+				<!-- THIGH --> 
+				<Transform DEF="THIGH" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1 1 1">
+					<IndexedFaceSet USE="SamllOctahedron"></IndexedFaceSet>
+				</Transform>
+
+				<!-- KNEECALF --> 
+				<Transform DEF="RightKNEECALF" translation = "0 1.0 0"> 
+					<!-- JOIN --> 
+					<Transform DEF="KNEE" scale="0.5 0.5 0.5"><IndexedFaceSet USE="Axes"></IndexedFaceSet></Transform> 
+					<!-- CALF --> 
+					<Transform DEF="CALF" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1.0 1.0 1">
+						<IndexedFaceSet USE="SamllOctahedron"></IndexedFaceSet>
+					</Transform>  
+					<!-- ANKLEFOOT --> 
+					<Transform DEF="RightANKLEFOOT" translation = "0 1 0"> 
+						<!-- JOINT --> 
+						<Transform DEF="ANKLE" scale="0.5 0.5 0.5"><IndexedFaceSet USE="Axes"></IndexedFaceSet> </Transform> 
+						<!-- HANDFOOT --> 
+						<Transform DEF="HANDFOOT" translation = "0 0.5 0" rotation="1 0 0 1.57" scale="1.0 1.0 1">
+							<IndexedFaceSet USE="pyramid"></IndexedFaceSet>
+						</Transform> 
+					</Transform>
+				</Transform>
+			</Transform>   
+		</Transform> 
+
+	</Transform>
+ 
+	<Transform DEF="BACKGROUND" center="0,0,0" rotation="0,0,0,0" scale="5,5,5" scaleOrientation="0,0,0,0">
+		<shape> 
+		<appearance> 
+			<ImageTexture url='./tiles.jpg'/>
+		</appearance> 
+		<box  solid="true" ccw="false"> </box> 
+		</shape> 
+	</Transform> 
+	<Transform rotation="1, 0,0,1.57">
+		<Shape>
+		<IndexedFaceSet solid='false' coordIndex='0 1 2 3 4 -1'>
+		<Coordinate point='5.0 0 5.0 5.0 0 -5.0 -5.0 0 -5.0 -5.0 0 5.0 5.0 0 5.0'/>
+		</IndexedFaceSet> 
+		<Appearance>
+		<Material diffuseColor='0.27 0.51 0.71' transparency='.5'/>
+		</Appearance>
+		</Shape>
+	</Transform>   
+  
+	<timeSensor DEF="time" cycleInterval="2" loop="true" enabled='true'></timeSensor>   
+    <ROUTE fromNode='StartStop' fromField='isActive' toNode='time' toField='enabled' />
+	<!-- ANIMATIONOfLeg --> 
+		<!-- AnimOfLeftLeg --> 
+	<OrientationInterpolator DEF = "AnimOfLeftLeg" key = "0 0.25 0.5 0.75 1 " keyValue = '-1 0 0 0 -1 0 0 0.2 -1 0 0 0 1 0 0 0.3 -1 0 0 0'/>
+	<Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfLeftLeg" toField="set_fraction"></Route>
+		<Route fromNode="AnimOfLeftLeg" fromField ="value_changed" toNode="LeftHIPTHIGH" toField="set_rotation"></Route>
+		<!-- AnimOfLeftLegFoot -->
+	<OrientationInterpolator DEF = "AnimOfLeftLegFoot" key = "0 0.25 0.5 0.75 1" keyValue = '-1 0 0 0 -1 0 0 0.6 -1 0 0 0 1 0 0 0.0 -1 0 0 0'/>
+	<Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfLeftLegFoot" toField="set_fraction"></Route> 
+		<Route fromNode="AnimOfLeftLegFoot" fromField ="value_changed" toNode="LeftKNEECALF" toField="set_rotation"></Route>
+   		<Route fromNode="AnimOfLeftLegFoot" fromField ="value_changed" toNode="LeftANKLEFOOT" toField="set_rotation"></Route>
+	
+
+		<!-- AnimOfRightLeg -->
+	<OrientationInterpolator DEF = "AnimORightLeg" key = "0 0.25 0.5 0.75 1 " keyValue = '-1 0 0 0 1 0 0 0.3 -1 0 0 0 -1 0 0 0.2 -1 0 0 0'/>
+	<Route fromNode="time" fromField ="fraction_changed" toNode="AnimORightLeg" toField="set_fraction"></Route>
+		<Route fromNode="AnimORightLeg" fromField ="value_changed" toNode="RightHIPTHIGH" toField="set_rotation"></Route>
+		<!-- AnimOfRightLegFoot -->
+	<OrientationInterpolator DEF = "AnimOfRightLegFoot" key = "0 0.25 0.5 0.75 1" keyValue = '-1 0 0 0 1 0 0 0.0 -1 0 0 0 -1 0 0 0.6 -1 0 0 0'/>
+	<Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfRightLegFoot" toField="set_fraction"></Route> 
+		<Route fromNode="AnimOfRightLegFoot" fromField ="value_changed" toNode="RightKNEECALF" toField="set_rotation"></Route>
+   		<Route fromNode="AnimOfRightLegFoot" fromField ="value_changed" toNode="RightANKLEFOOT" toField="set_rotation"></Route>
+
+	<!-- ANIMATIONOfArm --> 	
+		<!-- ANIMATIONOfRightArm --> 
+		<OrientationInterpolator DEF = "AnimOfRightArm" key = "0 0.25 0.5 0.75 1 " keyValue = '-1 0 0 -1.57 -1 0 0 3.14 -1 0 0 1.57 -1 0 0 0 -1 0 0 -1.57 '/>
+        <Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfRightArm" toField="set_fraction"></Route>
+        <Route fromNode="AnimOfRightArm" fromField ="value_changed" toNode="RightShoulderUpperArm" toField="set_rotation"></Route>
+		<!-- ANIMATIONOfRIghtForceArm -->
+		<OrientationInterpolator DEF = "AnimOfRightForceArm" key = "0 0.25 0.5 0.75 1" keyValue = '1 0 0 0.78 1 0 0 0 0.78 0 0 1.57 1 0 0 0 1 0 0 0.78 '/>
+		<Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfRightForceArm" toField="set_fraction"></Route>
+		<Route fromNode="AnimOfRightForceArm" fromField ="value_changed" toNode="RightElbowForceArm" toField="set_rotation"></Route> 
+		<!-- ANIMATIONOfRightHand -->
+		<OrientationInterpolator DEF = "AnimOfRightHand" key = "0 0.25 0.5 0.75 1" keyValue = '1 0 0 0 1 0 0 0.78 1 0 0 0.78 1 0 0 0 1 0 0 0 '/>
+		<Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfRightHand" toField="set_fraction"></Route>
+		<Route fromNode="AnimOfRightHand" fromField ="value_changed" toNode="RightWristHand" toField="set_rotation"></Route>
+
+
+		<!-- ANIMATIONOfLeftArm --> 
+		<OrientationInterpolator DEF = "AnimOfLeftArm" key = "0 0.25 0.5 0.75 1 " keyValue = '-1 0 0 1.57 -1 0 0 0 -1 0 0 -1.57 -1 0 0 3.14 -1 0 0 1.57 '/>
+        <Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfLeftArm" toField="set_fraction"></Route>
+        <Route fromNode="AnimOfLeftArm" fromField ="value_changed" toNode="LeftShoulderUpperArm" toField="set_rotation"></Route>
+		<!-- ANIMATIONOfLeftForceArm -->
+		<OrientationInterpolator DEF = "AnimOfLeftForceArm" key = "0 0.25 0.5 0.75 1" keyValue = '1 0 0 1.57 1 0 0 0 1 0 0 0.78 1 0 0 0.78 1 0 0 1.57 '/>
+		<Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfLeftForceArm" toField="set_fraction"></Route>
+		<Route fromNode="AnimOfLeftForceArm" fromField ="value_changed" toNode="LeftElbowForceArm" toField="set_rotation"></Route> 
+		<!-- ANIMATIONOfLeftHand -->
+		<OrientationInterpolator DEF = "AnimOfLeftHand" key = "0 0.25 0.5 0.75 1" keyValue = '1 0 0 0.78 1 0 0 0 1 0 0 0 1 0 0 0.78 1 0 0 0.78 '/>
+		<Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfLeftHand" toField="set_fraction"></Route>
+		<Route fromNode="AnimOfLeftHand" fromField ="value_changed" toNode="LeftWristHand" toField="set_rotation"></Route>
+ 
+	<!-- ANIMATIONOfHead -->
+		<OrientationInterpolator DEF = "AnimOfHead" key = "0 0.25 0.5 0.75 1 " keyValue = '0 0 0 0 0 1 0 1.57 1 0 1.57 0 1 0 1.57 0 0 0 0 '/>
+        <Route fromNode="time" fromField ="fraction_changed" toNode="AnimOfHead" toField="set_fraction"></Route>
+        <Route fromNode="AnimOfHead" fromField ="value_changed" toNode="NeekHeadEye" toField="set_rotation"></Route>
+		 
+
+ 
+      </Scene>
+    </X3D>
+  </body>
+</html>
+

@@ -1,0 +1,149 @@
+Web3D Assignment 2 
+Due Date: End week 10 Friday 15th May 9pm 
+Assessment: 33% 
+Type: Individual 
+Submission: Canvas 
+Theme: Swimmer using Threejs and Javascript 
+Clarifications and Corrections 
+Web3D作业2 
+截止日期:第10周5月15日星期五晚上9点 
+评价:33% 
+类型:个人 
+提交:帆布 
+主题:游泳者使用3ejs和Javascript 
+澄清和修正
+
+Overview 
+	This assignment uses the Threejs library to render the swimmer from assignment 1 instead of X3D. 
+		ThreeJS is a higher level scene graph library built on top of the lower level WebGL library - which is what actually allows 3D graphics to be displayed in the browser.
+	Swimmer With Interactive Joint and Rendering Controls
+	The assignment is to write a JavaScript program to render and interactively control the swimmer from assignment 1 using the ThreeJS library instead of X3D. 
+		ThreeJS is a higher level scene graph library built on top of the lower level WebGL library - which is what actually allows 3D graphics to be displayed in the browser.
+	The diagrams from the previous assignment apply to this assignment as well.
+	The tutorials will again introduce the fundamentals required in for the assignment and it is recommended that you follow the tutorial exercises. 
+		However, solutions will not be given as they constitute the assignment. 
+	这个作业使用Threejs库来呈现作业1中的游泳者，而不是X3D。ThreeJS是一个建立在低层WebGL库之上的高级场景图形库，它实际上允许在浏览器中显示3D图形。
+	游泳者与交互关节和渲染控制
+		作业是写一个JavaScript程序来渲染和交互控制游泳者从作业1使用ThreeJS库而不是X3D。
+		ThreeJS是一个建立在低层WebGL库之上的高级场景图形库，它实际上允许在浏览器中显示3D图形。
+	上一次作业中的图表也适用于这次作业。
+	本教程将再次介绍作业中所需的基础知识，建议您遵循本教程中的练习。然而，解决方案将不会给出，因为他们构成的任务。
+
+
+Interactive Joint Controls 
+	The rotation angles around joints are to be interactively controlled via the keyboard, 
+	with bindings as given below. The two images at the top show the swimmer in the neutral position and a 'posed' position.
+	交互式联合控制
+	旋转角度周围的关节是通过键盘交互控制，与绑定如下所示。顶部的两张图片显示了游泳者的中立姿势和“摆好姿势”。
+Rendering Controls 
+	There are to be rendering controls to allow basic and lit rendering, along with wireframe and filled
+	呈现控件
+	有渲染控制，以允许基本和灯光渲染，以及线框和填充
+
+Details 
+	As with assignment 1, the figure should consist of a torso, eyes, arms and legs.
+	As in assignment 1 you will create shapes for the body parts using custom geometry objects, in part to show the pivot points at the joints in the animation.
+	Joints and body segments are to be rendered with an axes object, with the ability to disable rendering them.
+	细节 
+		和作业1一样，这个图形应该包括躯干、眼睛、手臂和腿。
+		与作业1一样，你将使用自定义几何对象为身体部分创建形状，部分用来显示动画中关节的枢轴点。
+		关节和身体部分将使用axis对象进行呈现，并且能够禁用呈现它们。 
+	The figure should be properly constructed according to a hierarchy/scene graph as per assignment 1 with the torso at the root, legs and arms and head attached to the torso via joints. 
+	The limbs will have upper and lower segments and either a hand or foot, with joints in between.
+	For this assignment there will be a 'world scene' object that the swimmer is a child of. The scene object will have mouse controls to rotate the whole scene using the ThreeJS Trackball object.
+	The program should support basic colours and materials as well as lighting with Lambert material. It should be possible to toggle between the basic colours and lighting colours via a key toggle.
+	Your assignment should take advantage of functions to simplify the creation of the swimmer and its components.
+		根据作业1所示的层次结构/场景图，正确地构建人物形象，躯干在根上，腿和胳膊以及头部通过关节连接到躯干上。
+		四肢分为上下两部分，手或脚，中间有关节。
+		这次作业将会有一个“世界场景”对象，游泳者是它的子对象。场景对象将使用鼠标控件使用ThreeJS轨迹球对象旋转整个场景。
+		该计划应支持基本的颜色和材料，以及照明与兰伯特材料。它应该可以切换之间的基本颜色和照明颜色通过一个关键的开关。
+		您的任务应该利用函数来简化游泳器及其组件的创建。
+	Code should be simply annotated so that its easy to identify the different areas of your program. The assignment should be split into several logical files based on the content of the file.
+	All joints are to be able to interactively rotated via the keyboard. This will help show the joints and hierarchy have been constructed correctly and as an introduction on how to start animation for the next assignment.
+	Key bindings for joint manipulation are up and down arrows to increase/decrease angles, left and right arrow keys to choose left/right joint. Then specific joint key bindings, the axis to rotate the joint about and the rotation range or limits are:
+		代码应该简单地进行注释，以便于识别程序的不同区域。根据文件的内容，分配应该被分成几个逻辑文件。
+		所有的关节都可以通过键盘进行交互旋转。这将有助于显示关节和层次结构已被正确构造，并作为介绍如何开始动画为下一个任务。
+		用于关节操作的键绑定为上下箭头以增加/减少角度，左右箭头键用于选择左/右关节。然后具体的关节键绑定，轴旋转关节的角度和旋转范围或限制为:
+	Key bindings for joint manipulation are up and down arrows to increase/decrease angles, left and right arrow keys to choose left/right joint. Then specific joint key bindings, the axis to rotate the joint about and the rotation range or limits are:
+		Joint	Key	Axis	Range
+		Shoulder	s	z	[-90,90]
+		Elbow	e	z	[0,180]
+		Wrist	w	z	[-90,90]
+		Hip	h	x	[-90,90]
+		Knee	k	x	[-90,0]
+		Ankle	a	x	[0,90]
+		Neck	n	y	[-90,90]
+		连接键轴范围
+		肩部s形[-90,90]
+		弯头e z [0,180]
+		手腕w z [-90,90]
+		hip h x [-90,90]
+		膝关节k x [-90,0]
+		踝a x [0,90]
+		颈n y [-90,90]
+	有三个渲染绑定:
+		Key	Control
+		m	wireframe/filled mode
+		l	basic/lighting
+		x	enable/disable axes
+	Functions 
+			The recommended functions for creating your swimmer are listed below, 
+			although the names and parameters can be, and might need to be, varied.
+	功能
+		以下是创建您的游泳者的推荐功能，
+		尽管名称和参数可以(也可能需要)更改。 
+		// returns decahedron object
+		function createDecahedron(sizeX, sizeY, sizeZ, material){}
+
+		// returns joint axes object
+		function createJoint(name){}
+
+		// returns a whole arm
+		function createArm(material){}
+
+		// returns a whole leg
+		function createLeg(material){}
+
+		// returns the torso object
+		function createTorso(material){}
+
+		// returns the head object
+		function createHead(material){}
+
+		// Uses the other functions to create the swimmer
+		function createSwimmer(material){}
+    
+General Requirements
+	Use strict Javascript
+	The code must be valid JavaScript (errors/warnings will result in deductions).
+	Your assignment is assessed using recent versions of chrome or firefox, make sure your assignment will run correctly on them.
+	一般要求
+		使用严格的Javascript
+		代码必须是有效的JavaScript(错误/警告将导致扣除)。
+		你的作业是使用最新版本的chrome或firefox进行评估的，请确保你的作业能在这些浏览器上正确运行。
+Rubric/Marking guide
+How well features are implemented will determine whether an assignment is in the upper or lower range of its mark.
+Subject to change
+PA:
+A static swimmer model implemented using threejs, with a trackball scene viewer, and programmed in Javascript.
+CR:
+Interactive joint controls.
+DI:
+Lighting and rendering controls.
+HD:
+Joint constraints.
+Correctly constucted hierarchy.
+Well written code. 
+	标题/标记指导
+		特性实现的好坏将决定一个赋值是在其标记的上下限范围内。
+		可能发生变化
+		PA:
+			一个静态的游泳者模型，使用threejs实现，带有一个轨迹球场景查看器，并用Javascript编写。
+		CR:
+			交互式联合控制。
+		DI:
+			灯光和渲染控制。
+		HD:
+			共同约束。
+			正确沈阳按照层次结构。
+			编写的代码。

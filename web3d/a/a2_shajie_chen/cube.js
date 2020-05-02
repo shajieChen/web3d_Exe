@@ -20,40 +20,6 @@ renderer.render(scene, camera);
 var controls = new THREE.TrackballControls(camera, renderer.domElement);
 controls.addEventListener('change', render);
 animate();
- 
-class CShoulder 
-{
-
-}
-
-class CHip
-{
-
-}
-
-class CHead 
-{
-
-}
-
-class CSwimmer
-{
-    RightShoulder;   
-    LeftShoulder;
-    RightHip ; 
-    LeftHip ; 
-    MHead ;  
-    constructor(RShoulder , LShoulder , RHip, LHip, head)
-    {
-        this.RightShoulder = RShoulder;  
-        this.LeftShoulder = LShoulder ; 
-        this.RightHip = RHip; 
-        this.LeftHip = LHip ; 
-        this.MHead = head ; 
-    }
-
-}
-
 
 function render() {
     renderer.render(scene, camera); 

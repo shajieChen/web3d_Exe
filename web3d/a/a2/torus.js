@@ -13,47 +13,29 @@ shoulder.rotation.z = Math.PI / 6;
 
 init() ;   
 createShoulder() ;
-scene.add(shoulder);   
+// scene.add(shoulder);
+
+/**
+ * Create the light
+ */
+var light  = new THREE.DirectionalLight(0xffffff);
+light.position.set(0, 0, 1);
+light  = new THREE.PointLight(0xffffff);
+scene.add(light); 
+
+var torus_geometry = new THREE.TorusGeometry( 4, 0, 5, 7 );
+var color = new THREE.Color("rgb(255, 0, 0)"); 
+// var torus_material = new THREE.MeshBasicMaterial( { color, wireframe: false } );
+var torus_material = new THREE.MeshPhongMaterial({color: 0xff0000, specular: 0xffffff});
+var torus = new THREE.Mesh( torus_geometry, torus_material );
+scene.add( torus );
+
 scene.add(createAxes(2));
 renderer.render(scene, camera); 
 
 var controls = new THREE.TrackballControls(camera, renderer.domElement);
 controls.addEventListener('change', render);
 animate();
- 
-class CShoulder 
-{
-
-}
-
-class CHip
-{
-
-}
-
-class CHead 
-{
-
-}
-
-class CSwimmer
-{
-    RightShoulder;   
-    LeftShoulder;
-    RightHip ; 
-    LeftHip ; 
-    MHead ;  
-    constructor(RShoulder , LShoulder , RHip, LHip, head)
-    {
-        this.RightShoulder = RShoulder;  
-        this.LeftShoulder = LShoulder ; 
-        this.RightHip = RHip; 
-        this.LeftHip = LHip ; 
-        this.MHead = head ; 
-    }
-
-}
-
 
 function render() {
     renderer.render(scene, camera); 

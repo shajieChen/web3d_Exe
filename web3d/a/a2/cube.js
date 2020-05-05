@@ -10,48 +10,72 @@ var renderer;
 var shoulder = new THREE.Object3D();
 shoulder.name = "shoulder";
 shoulder.rotation.z = Math.PI / 6;
+var hex16Color =  0xffffff;  
+var globalMat = new THREE.MeshBasicMaterial({color: hex16Color}); 
+var test = createOctahedron(1, 1, 1, globalMat);
+
 
 init() ;   
 createShoulder() ;
-scene.add(shoulder);   
+scene.add(test);   
 scene.add(createAxes(2));
 renderer.render(scene, camera); 
 
 var controls = new THREE.TrackballControls(camera, renderer.domElement);
 controls.addEventListener('change', render);
-animate();
- 
-class CShoulder 
-{
+animate(); 
 
+class CShoulder 
+{ 
+    constructor(shoulder , upperArm , elbow ,lowerArm, wrist, hand)
+    {
+        this.Shoulder = shoulder; 
+        this.UppperArm = upperArm  ;
+        this.Elbow = elbow; 
+        this.LowerArm = lowerArm;  
+        this.Wrist = wrist ; 
+        this.Hand = hand;  
+    }
 }
 
 class CHip
-{
-
+{ 
+    constructor(hip, upperLeg ,knee, lowerLeg , ankle , foot)
+    {
+        this.Hip = hip;  
+        this.UpperLeg = upperLeg ; 
+        this.Knee = knee; 
+        this.LowerLeg = lowerLeg ; 
+        this.Ankle = ankle  ;  
+        this.Foot = foot;  
+    }
 }
 
 class CHead 
-{
-
+{ 
+    constructor(MHead, MNeck)
+    {
+        this.head = MHead ;  
+        this.neck = MNeck ; 
+    }
 }
 
 class CSwimmer
-{
-    RightShoulder;   
-    LeftShoulder;
-    RightHip ; 
-    LeftHip ; 
-    MHead ;  
+{ 
     constructor(RShoulder , LShoulder , RHip, LHip, head)
     {
+        this.Torso = new THREE.Object3D(); 
         this.RightShoulder = RShoulder;  
         this.LeftShoulder = LShoulder ; 
         this.RightHip = RHip; 
         this.LeftHip = LHip ; 
         this.MHead = head ; 
-    }
-
+        this.Torso.add(this.RightShoulder);
+        this.Torso.add(this.LeftShoulder);
+        this.Torso.add(this.RightHip);
+        this.Torso.add(this.LeftHip);
+        this.Torso.add(this.MHead);
+    }  
 }
 
 
@@ -84,6 +108,82 @@ function init()
     document.onkeyup = handleKeyUp;
 } 
 
+
+// returns joint axes object
+function createJoint(name){}
+
+// returns a whole arm
+function createArm(material){}
+
+// returns a whole leg
+function createLeg(material){}
+
+// returns the torso object
+function createTorso(material){}
+
+// Uses the other functions to create the swimmer
+function createSwimmer(material){}
+
+
+// returns the head object
+function createHead(material)
+{
+    var head = new CHead() ; 
+    head.head = new THREE.geometry();
+    head.neck = createJoint("Neck"); 
+    
+}
+
+
+// returns Octahedron object
+function createOctahedron(sizeX, sizeY, sizeZ, material)
+{
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(0.3,0,0));
+    geometry.vertices.push(new THREE.Vector3(0,0.3,0));
+    geometry.vertices.push(new THREE.Vector3(0,0,0.5));
+    geometry.vertices.push(new THREE.Vector3(0,-0.3,0));
+    geometry.vertices.push(new THREE.Vector3(0,0,-0.5)); 
+    geometry.vertices.push(new THREE.Vector3(-0.3,0,0)); 
+    geometry.faces.push(new THREE.Face3(0,1,2));
+    geometry.faces.push(new THREE.Face3(0,2,3));
+    geometry.faces.push(new THREE.Face3(0,3,4));
+    geometry.faces.push(new THREE.Face3(0,4,1));
+    geometry.faces.push(new THREE.Face3(5,1,4));
+    geometry.faces.push(new THREE.Face3(5,4,3));
+    geometry.faces.push(new THREE.Face3(5,3,2));
+    geometry.faces.push(new THREE.Face3(5,2,1));
+    geometry.computeFaceNormals();     
+    var object = new THREE.Mesh(geometry, material);
+    object.name = "Octahedron" ; 
+    object.scaleX = sizeX; 
+    object.scaleY = sizeY; 
+    object.scaleZ = sizeZ;  
+    return object;  
+}
+
+// 0xffff00
+function createCube(scaleX , scaleY, scaleZ,  
+                    hex16Color , isWireFrameOn)
+{ 
+    // A square using vertex coordinates and face indexes
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(-1, -1, 0));
+    geometry.vertices.push(new THREE.Vector3(1, -1, 0));
+    geometry.vertices.push(new THREE.Vector3(1, 1, 0));
+    geometry.vertices.push(new THREE.Vector3(-1, 1, 0));
+    geometry.faces.push(new THREE.Face3(0, 1, 2));
+    geometry.faces.push(new THREE.Face3(0, 2, 3));
+    geometry.computeFaceNormals();
+    var material = new THREE.MeshBasicMaterial({color: hex16Color}); 
+    var object = new THREE.Mesh(geometry, material); 
+    object.rotation.z = Math.PI / 4 ; 
+    object.material.wireframe = isWireFrameOn ;   
+    object.scaleX = scaleX ; 
+    object.scaleY = scaleY;  
+    object.scaleZ = scaleZ;  
+    return object;  
+}  
 function createShoulder() 
 { 
     // Upper arm
@@ -113,29 +213,6 @@ function createShoulder()
     shoulder.add(upperArm);
     shoulder.add(createAxes(2));  
 }
-
-// 0xffff00
-function createCube(scaleX , scaleY, scaleZ,  
-                    hex16Color , isWireFrameOn)
-{ 
-    // A square using vertex coordinates and face indexes
-    var geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3(-1, -1, 0));
-    geometry.vertices.push(new THREE.Vector3(1, -1, 0));
-    geometry.vertices.push(new THREE.Vector3(1, 1, 0));
-    geometry.vertices.push(new THREE.Vector3(-1, 1, 0));
-    geometry.faces.push(new THREE.Face3(0, 1, 2));
-    geometry.faces.push(new THREE.Face3(0, 2, 3));
-    geometry.computeFaceNormals();
-    var material = new THREE.MeshBasicMaterial({color: hex16Color}); 
-    var object = new THREE.Mesh(geometry, material); 
-    object.rotation.z = Math.PI / 4 ; 
-    object.material.wireframe = isWireFrameOn ;   
-    object.scaleX = scaleX ; 
-    object.scaleY = scaleY;  
-    object.scaleZ = scaleZ;  
-    return object;  
-}  
 
 function handleKeyDown(event)
 {

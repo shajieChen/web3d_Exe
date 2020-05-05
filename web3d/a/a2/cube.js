@@ -12,7 +12,9 @@ shoulder.name = "shoulder";
 shoulder.rotation.z = Math.PI / 6;
 var hex16Color =  0xffffff;  
 var globalMat = new THREE.MeshBasicMaterial({color: hex16Color}); 
-var test = createOctahedron(1, 1, 1, globalMat);
+// var test = createDecahedron(1, 1, 1, globalMat);
+// var test = createEye(0.1 , globalMat , "eye");
+var test = createHead(1,1,1,globalMat);
 
 
 init() ;   
@@ -53,10 +55,12 @@ class CHip
 
 class CHead 
 { 
-    constructor(MHead, MNeck)
+    constructor(MHead, MNeck, leftEye , RightEye)
     {
         this.head = MHead ;  
         this.neck = MNeck ; 
+        this.LEye = leftEye;  
+        this.REye = RightEye; 
     }
 }
 
@@ -64,7 +68,7 @@ class CSwimmer
 { 
     constructor(RShoulder , LShoulder , RHip, LHip, head)
     {
-        this.Torso = new THREE.Object3D(); 
+        this.Torso = createDecahedron(1,1,1 ,globalMat); 
         this.RightShoulder = RShoulder;  
         this.LeftShoulder = LShoulder ; 
         this.RightHip = RHip; 
@@ -126,14 +130,79 @@ function createSwimmer(material){}
 
 
 // returns the head object
-function createHead(material)
+function createHead(sizeX, sizeY, sizeZ, material)
 {
-    var head = new CHead() ; 
-    head.head = new THREE.geometry();
-    head.neck = createJoint("Neck"); 
-    
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(0.5,0,0));
+    geometry.vertices.push(new THREE.Vector3(0,0.5,0));
+    geometry.vertices.push(new THREE.Vector3(0,0,0.5));
+    geometry.vertices.push(new THREE.Vector3(0,-0.5,0));
+    geometry.vertices.push(new THREE.Vector3(0,0,-0.5)); 
+    geometry.vertices.push(new THREE.Vector3(-0.5,0,0)); 
+    geometry.faces.push(new THREE.Face3(0,1,2));
+    geometry.faces.push(new THREE.Face3(0,2,3));
+    geometry.faces.push(new THREE.Face3(0,3,4));
+    geometry.faces.push(new THREE.Face3(0,4,1));
+    geometry.faces.push(new THREE.Face3(5,1,4));
+    geometry.faces.push(new THREE.Face3(5,4,3));
+    geometry.faces.push(new THREE.Face3(5,3,2));
+    geometry.faces.push(new THREE.Face3(5,2,1));
+    geometry.computeFaceNormals();     
+    var object = new THREE.Mesh(geometry, material);
+    object.name = "Octahedron" ; 
+    object.scaleX = sizeX; 
+    object.scaleY = sizeY; 
+    object.scaleZ = sizeZ;  
+    return object;  
+}
+function createEye(raidus, material, name)
+{
+    var geometry = new THREE.SphereGeometry( raidus, 32, 32 );
+    var object = new THREE.Mesh(geometry, material);
+    object.name = name ;
+    return object;  
 }
 
+
+
+// returns decahedron object
+function createDecahedron(sizeX, sizeY, sizeZ, material)
+{
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(0,1,0));
+    geometry.vertices.push(new THREE.Vector3(0.9510,0.3090,0.0));
+    geometry.vertices.push(new THREE.Vector3(0.5877,-0.8090,0.0));
+    geometry.vertices.push(new THREE.Vector3(-0.5877,-0.8090,0.0));
+    geometry.vertices.push(new THREE.Vector3(-0.9510,0.3090,0.0)); 
+    geometry.vertices.push(new THREE.Vector3(0,0,0));  
+    geometry.vertices.push(new THREE.Vector3(0,0,-0.5)); 
+    geometry.vertices.push(new THREE.Vector3(0,0,0.5)); 
+    /*Center Decahedron */
+    geometry.faces.push(new THREE.Face3(0 , 4 , 5));
+    geometry.faces.push(new THREE.Face3(0 , 5 , 1));
+    geometry.faces.push(new THREE.Face3(1 , 5 , 2));
+    geometry.faces.push(new THREE.Face3(2 , 5 , 3));
+    geometry.faces.push(new THREE.Face3(3 , 5 , 4));
+    /*back Decahedron */
+    geometry.faces.push(new THREE.Face3(4 , 6 , 3));
+    geometry.faces.push(new THREE.Face3(0 , 6 , 4));
+    geometry.faces.push(new THREE.Face3(1 , 6 , 0));
+    geometry.faces.push(new THREE.Face3(2 , 6 , 1));
+    geometry.faces.push(new THREE.Face3(3 , 6 , 2));
+    /*Front Dechaedron */
+    geometry.faces.push(new THREE.Face3(3 , 7 , 4));
+    geometry.faces.push(new THREE.Face3(4 , 7 , 0));
+    geometry.faces.push(new THREE.Face3(0 , 7 , 1));
+    geometry.faces.push(new THREE.Face3(1 , 7 , 2));
+    geometry.faces.push(new THREE.Face3(2 , 7 , 3));   
+    geometry.computeFaceNormals();     
+    var object = new THREE.Mesh(geometry, material);
+    object.name = "Octahedron" ; 
+    object.scaleX = sizeX; 
+    object.scaleY = sizeY; 
+    object.scaleZ = sizeZ;  
+    return object;  
+}
 
 // returns Octahedron object
 function createOctahedron(sizeX, sizeY, sizeZ, material)

@@ -11,11 +11,15 @@ var shoulder = new THREE.Object3D();
 shoulder.name = "shoulder";
 shoulder.rotation.z = Math.PI / 6;
 var hex16Color =  0xffffff;  
+var hex16Yellow = 0xffff00; 
+var yelloMat = new THREE.MeshBasicMaterial({color: hex16Yellow}); 
 var globalMat = new THREE.MeshBasicMaterial({color: hex16Color}); 
 // var test = createDecahedron(1, 1, 1, globalMat);
 // var test = createEye(0.1 , globalMat , "eye");
-var test = createHead(1,1,1,globalMat);
-
+var test = createHead(1,1,1,
+                      1,1,1,
+                        globalMat);
+ 
 
 init() ;   
 createShoulder() ;
@@ -25,7 +29,7 @@ renderer.render(scene, camera);
 
 var controls = new THREE.TrackballControls(camera, renderer.domElement);
 controls.addEventListener('change', render);
-animate(); 
+animate();  
 
 class CShoulder 
 { 
@@ -112,10 +116,6 @@ function init()
     document.onkeyup = handleKeyUp;
 } 
 
-
-// returns joint axes object
-function createJoint(name){}
-
 // returns a whole arm
 function createArm(material){}
 
@@ -129,10 +129,52 @@ function createTorso(material){}
 function createSwimmer(material){}
 
 
-// returns the head object
-function createHead(sizeX, sizeY, sizeZ, material)
+
+// returns joint axes object
+/**
+ * Function to Create the Joint(Base on the axes)
+ * @param {transform X} sizeX 
+ * @param {Transform Y} sizeY 
+ * @param {Transform Z} sizeZ 
+ * @param {Scale X} scaleX 
+ * @param {Scale Y} scaleY 
+ * @param {Scale Z} scaleZ 
+ * @param {Joint Name} name 
+ */
+function createJoint(sizeX, sizeY, sizeZ, 
+    scaleX, scaleY, scaleZ, 
+    name)
 {
     var geometry = new THREE.Geometry();
+    var material = new THREE.MeshBasicMaterial({color: 0xffff00});
+    var Joint = new THREE.Mesh(geometry, material);
+
+    Joint.add(createAxes(2));
+    Joint.position.x = sizeX;  
+    Joint.position.y = sizeY; 
+    Joint.position.z = sizeZ; 
+
+    Joint.scale.x = scaleX;  
+    Joint.scale.y = scaleY; 
+    Joint.scale.z = scaleZ;  
+    return Joint; 
+}
+
+// returns the head object
+function createHead(sizeX, sizeY, sizeZ, 
+                    scaleX, scaleY, scaleZ, 
+                    material)
+{
+    var Neck = createJoint(0 ,-0.5 ,0 , 
+                            0.7 ,0.7 ,0.7 ,
+                            "Neck");
+    var LEye = createEye(-0.2, 0.0, 0.2, 
+                    1, 1 , 1 , 
+                    0.1,yelloMat , "LeftEye" );
+    var REye = createEye(0.2, 0.0, 0.2, 
+                    1, 1 ,1 , 
+                    0.1,yelloMat , "RightEye" ); 
+    var geometry = new THREE.Geometry(); 
     geometry.vertices.push(new THREE.Vector3(0.5,0,0));
     geometry.vertices.push(new THREE.Vector3(0,0.5,0));
     geometry.vertices.push(new THREE.Vector3(0,0,0.5));
@@ -148,18 +190,34 @@ function createHead(sizeX, sizeY, sizeZ, material)
     geometry.faces.push(new THREE.Face3(5,3,2));
     geometry.faces.push(new THREE.Face3(5,2,1));
     geometry.computeFaceNormals();     
-    var object = new THREE.Mesh(geometry, material);
-    object.name = "Octahedron" ; 
-    object.scaleX = sizeX; 
-    object.scaleY = sizeY; 
-    object.scaleZ = sizeZ;  
-    return object;  
+    var MHead = new THREE.Mesh(geometry, material);
+    MHead.name = "Head" ;  
+    MHead.position.x = sizeX; 
+    MHead.position.y = sizeY; 
+    MHead.position.z = sizeZ;   
+    MHead.scale.x = scaleX;  
+    MHead.scale.y = scaleY;  
+    MHead.scale.z = scaleZ;   
+    MHead.add(Neck);//TODO : tmp variable delete it
+    MHead.add(LEye);
+    MHead.add(REye);
+    return MHead;  
 }
-function createEye(raidus, material, name)
+
+function createEye(PosX , PosY, PosZ ,
+                   ScaleX , ScaleY , ScaleZ 
+                   , raidus, material, name)
 {
     var geometry = new THREE.SphereGeometry( raidus, 32, 32 );
     var object = new THREE.Mesh(geometry, material);
     object.name = name ;
+    object.position.x = PosX; 
+    object.position.y = PosY; 
+    object.position.z = PosZ;  
+    object.scale.x = ScaleX;  
+    object.scale.y = ScaleY;  
+    object.scale.z = ScaleZ; 
+
     return object;  
 }
 
@@ -198,9 +256,9 @@ function createDecahedron(sizeX, sizeY, sizeZ, material)
     geometry.computeFaceNormals();     
     var object = new THREE.Mesh(geometry, material);
     object.name = "Octahedron" ; 
-    object.scaleX = sizeX; 
-    object.scaleY = sizeY; 
-    object.scaleZ = sizeZ;  
+    object.scale.x = sizeX; 
+    object.scale.y = sizeY; 
+    object.scale.z = sizeZ;  
     return object;  
 }
 
@@ -225,9 +283,9 @@ function createOctahedron(sizeX, sizeY, sizeZ, material)
     geometry.computeFaceNormals();     
     var object = new THREE.Mesh(geometry, material);
     object.name = "Octahedron" ; 
-    object.scaleX = sizeX; 
-    object.scaleY = sizeY; 
-    object.scaleZ = sizeZ;  
+    object.scale.x = sizeX; 
+    object.scale.y = sizeY; 
+    object.scale.z = sizeZ;  
     return object;  
 }
 
@@ -248,9 +306,9 @@ function createCube(scaleX , scaleY, scaleZ,
     var object = new THREE.Mesh(geometry, material); 
     object.rotation.z = Math.PI / 4 ; 
     object.material.wireframe = isWireFrameOn ;   
-    object.scaleX = scaleX ; 
-    object.scaleY = scaleY;  
-    object.scaleZ = scaleZ;  
+    object.scale.x = scaleX ; 
+    object.scale.y = scaleY;  
+    object.scale.z = scaleZ;  
     return object;  
 }  
 function createShoulder() 

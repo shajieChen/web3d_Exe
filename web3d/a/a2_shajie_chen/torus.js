@@ -18,17 +18,40 @@ createShoulder() ;
 /**
  * Create the light
  */
-var light  = new THREE.DirectionalLight(0xffffff);
-light.position.set(0, 0, 1);
-light  = new THREE.PointLight(0xffffff);
-scene.add(light); 
+/**Ambient */
+const color = 0xFFFFFF;
+const intensity = 0.2;
+const ambientLight = new THREE.AmbientLight(color, intensity);
+scene.add(ambientLight);
+/**Specualr */
+var pointLight  = new THREE.PointLight(0xffffff);
+pointLight.position.set(0, 0, 5);
+pointLight  = new THREE.PointLight(0xffffff);
+scene.add(pointLight);
 
-var torus_geometry = new THREE.TorusGeometry( 4, 0, 5, 7 );
-var color = new THREE.Color("rgb(255, 0, 0)"); 
-// var torus_material = new THREE.MeshBasicMaterial( { color, wireframe: false } );
-var torus_material = new THREE.MeshPhongMaterial({color: 0xff0000, specular: 0xffffff});
-var torus = new THREE.Mesh( torus_geometry, torus_material );
-scene.add( torus );
+ // Cube
+var cube = new THREE.Mesh(
+        new THREE.BoxGeometry(100, 100, 100),
+        new THREE.MeshLambertMaterial({
+            color: 0xffffff
+        }));
+cube.position.set(0, 100, 0);
+scene.add(cube);
+// var torus_geometry = new THREE.TorusGeometry( 4, 0, 5, 7 ); 
+// var color = new THREE.Color("rgb(255, 0, 0)");  
+// var torus_material = new THREE.MeshPhongMaterial({color: 0xff0000, specular: 0xffffff , wireframe: false});
+// var torus = new THREE.Mesh( torus_geometry, torus_material );
+// scene.add( torus );
+// var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+// var material = new THREE.MeshPhongMaterial( {color: 0xffff00, specular: 0xffffff ,wireframe : false} );
+// var cube = new THREE.Mesh( geometry, material );
+// scene.add( cube );
+const cubeSize = 1;
+const cubeGeo = new THREE.BoxBufferGeometry(cubeSize, cubeSize, cubeSize);
+const cubeMat = new THREE.MeshPhongMaterial({color: '#8AC'});
+const mesh = new THREE.Mesh(cubeGeo, cubeMat);
+mesh.position.set(cubeSize + 1, cubeSize / 2, 0);
+scene.add(mesh);
 
 scene.add(createAxes(2));
 renderer.render(scene, camera); 
@@ -128,6 +151,7 @@ function handleKeyDown(event)
     case 39:
         scene.rotation.z -= 1 * Math.PI / 180;
         break;
+    
     }
 }
 function handleKeyUp(event)

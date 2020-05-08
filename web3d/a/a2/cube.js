@@ -21,10 +21,13 @@ var redMat = new THREE.MeshLambertMaterial({color: hex16Red});
 var globalMat = yelloMat; 
 var gloIsWireFrameOn = true; 
  
+
+/* ---------------------------- class Declartion ---------------------------- */
 class CShoulder 
 { 
-    constructor(shoulder , upperArm , elbow ,lowerArm, wrist, hand)
+    constructor(Arm ,shoulder , upperArm , elbow ,lowerArm, wrist, hand)
     {
+        this.Arm = Arm; 
         this.Shoulder = shoulder; 
         this.UppperArm = upperArm  ;
         this.Elbow = elbow; 
@@ -93,8 +96,7 @@ let cSwimmer = {};
 cMHead = createHead(0,1.5,0,
                       1,1,1,
                       0,0,0 , 
-                      yelloMat); 
-
+                      yelloMat);  
 cLeftHip = createLeg(0.5877 , -0.8090 , 0.0 , 
                         1.0 , 1.0, 1.0,
                         1.57 , 0.0, 0.0 , yelloMat); 
@@ -105,13 +107,22 @@ var testBody = createTorso(0, 0 , 0 ,
                             1, 1, 1, 
                             0 , 0 ,0, 
                             yelloMat); 
-
+cRightShoulder = createArm(0.9510,0.3090, 0 ,
+                            1, 1,1, 
+                            0, 0 ,0 ,
+                            yelloMat);  
+ cLeftShoulder =  createArm(-0.9510,0.3090, 0 ,
+                            1, 1,1, 
+                            0, 0 ,3.14 ,
+                            yelloMat);  
 init() ;   
-createShoulder() ;
+// createShoulder() ;
 scene.add(cLeftHip.Leg);
 scene.add(cRightHip.Leg);
 scene.add(cMHead.head);    
 scene.add(testBody);
+scene.add(cRightShoulder.Arm); 
+scene.add(cLeftShoulder.Arm);
 scene.add(createAxes(2)); 
 
 
@@ -162,15 +173,12 @@ function init()
     document.onkeyup = handleKeyUp;
 } 
 
-// returns a whole arm
-function createArm(sizeX, sizeY, sizeZ, 
-    scaleX, scaleY, scaleZ, material){}
-
 
 
 // Uses the other functions to create the swimmer
 function createSwimmer(sizeX, sizeY, sizeZ, 
-    scaleX, scaleY, scaleZ, material){}
+    scaleX, scaleY, scaleZ, material)
+    {}
 
 
 // returns the torso object BODY
@@ -297,7 +305,7 @@ function createHead(sizeX, sizeY, sizeZ,
     MHead.rotation.z = rotZ;
 
     /*Add it to sub child */
-    MHead.add(Neck);//TODO : tmp variable delete it
+    MHead.add(Neck);
     MHead.add(LEye);
     MHead.add(REye);
 
@@ -421,6 +429,76 @@ function createOctahedron(PosX , PosY, PosZ,
     return object;  
 }
 
+
+// returns a whole arm
+function createArm(PosX, PosY, PosZ, 
+    ScaleX, ScaleY, ScaleZ,
+    RotX , RotY , RotZ,material)
+{
+    var resultArm = {}; 
+    var Arm = new THREE.Object3D();
+    var Shoulder = {} ;
+    var UpperArm = {} ; 
+    var Elbow = {}    ; 
+    var ForeArm = {}  ; 
+    var Wrist = {}    ; 
+    var Hand = {}     ; 
+    /*Shoulder Creation */
+    Shoulder = createJoint(
+                        0, 0, 0,
+                        1, 1, 1,
+                        0, 0 ,0 ,
+                        "Shoulder");
+    /*Upper Arm */
+    UpperArm = createOctahedron(0.5, 0 , 0.0 , 
+                        1,1, 1, 
+                        0, 1.57,0, 
+                        material) ; 
+    /*Elbow */
+    Elbow = createJoint(1.0,0, 0,
+                        1,1,1,
+                        0, 0, 0, 
+                        material);
+    /*ForeArm */
+    ForeArm = createOctahedron(0.5, 0 , 0.0 , 
+                        1,1, 1, 
+                        0, 1.57,0, 
+                        material);
+    /*Wirst */
+    Wrist = createJoint(1.0, 0.0 ,0.0, 
+                        1.0 , 1.0 , 1.0,
+                        0 , 0, 0, 
+                        material);
+    /*Hand */
+    Hand = createRectangle(0.5 , 0.0 , 0.0 , 
+                            1, 1, -1, 
+                            0, 1.57, 0 , 
+                            material);
+    Arm.add(Shoulder);
+    Shoulder.add(UpperArm);
+    Shoulder.add(Elbow);
+    Elbow.add(ForeArm);
+    Elbow.add(Wrist);
+    Wrist.add(Hand);
+
+    Arm.position.x = PosX;  
+    Arm.position.y = PosY; 
+    Arm.position.z = PosZ;
+    
+    Arm.scale.x = ScaleX; 
+    Arm.scale.y = ScaleY; 
+    Arm.scale.z = ScaleZ; 
+
+    Arm.rotation.x = RotX; 
+    Arm.rotation.y = RotY; 
+    Arm.rotation.z = RotZ; 
+    
+    resultArm = new CShoulder(Arm, Shoulder , UpperArm , 
+                            Elbow,  ForeArm , Wrist , Hand);
+
+    return resultArm ; 
+
+}
 // returns a whole leg
 function createLeg(PosX, PosY, PosZ, 
                     scaleX, scaleY, scaleZ,
@@ -510,35 +588,7 @@ function createCube(scaleX , scaleY, scaleZ,
     object.scale.y = scaleY;  
     object.scale.z = scaleZ;  
     return object;  
-}  
-function createShoulder() 
-{ 
-    // Upper arm
-    var geometry = new THREE.BoxGeometry(2, 1, 1);
-    var material = new THREE.MeshBasicMaterial({color: 0xffff00});
-    var upperArm = new THREE.Mesh(geometry, material);
-    upperArm.name = "upperArm";
-    upperArm.position.x = 1;
-    upperArm.add(createAxes(2)); 
-
-    var elbow = new THREE.Mesh();  
-    elbow.position.x = 1; 
-    elbow.add(createAxes(2));
-
-    upperArm.add(elbow);
-    geometry = new THREE.BoxGeometry(2, 1, 1);
-    material = new THREE.MeshBasicMaterial({color: 0xffff00});
-    var lowerArm = new THREE.Mesh(geometry, material);
-    lowerArm.name = "upperArm";
-    lowerArm.position.x = 0.5;
-    lowerArm.rotation.z = Math.PI / 10 ; 
-    lowerArm.add(createAxes(2));
-    elbow.add(lowerArm);
-    
-    // Add upper arm as child of shoulder 
-    shoulder.add(upperArm);
-    shoulder.add(createAxes(2));  
-}
+}   
 
 function createRectangle(
         PosX, PosY , PosZ,

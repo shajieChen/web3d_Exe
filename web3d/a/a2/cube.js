@@ -14,15 +14,13 @@ shoulder.name = "shoulder";
 shoulder.rotation.z = Math.PI / 6;
 var hex16Color =  0xffffff;  
 var hex16Yellow = 0xffff00; 
-var hex16Red = 0x00ffff;
+var hex16Red = 0xff0000;
 var yelloMat = new THREE.MeshLambertMaterial({color: hex16Yellow}); 
 var whiteMat = new THREE.MeshLambertMaterial({color: hex16Color}); 
 var redMat = new THREE.MeshLambertMaterial({color: hex16Red}); 
 var globalMat = yelloMat; 
 var gloIsWireFrameOn = true; 
-
-
-
+ 
 class CShoulder 
 { 
     constructor(shoulder , upperArm , elbow ,lowerArm, wrist, hand)
@@ -38,8 +36,9 @@ class CShoulder
 
 class CHip
 { 
-    constructor(hip, upperLeg ,knee, lowerLeg , ankle , foot)
+    constructor(Leg , hip, upperLeg ,knee, lowerLeg , ankle , foot)
     {
+        this.Leg = Leg;  
         this.Hip = hip;  
         this.UpperLeg = upperLeg ; 
         this.Knee = knee; 
@@ -62,21 +61,19 @@ class CHead
 
 class CSwimmer
 {  
-    constructor(RShoulder , LShoulder , RHip, LHip, head)
-    {
-        this.Torso = createDecahedron(1,1,1,
-                                    1,1,1,
-                                    globalMat); 
+    constructor(Torso, RShoulder , LShoulder , RHip, LHip, head)
+    {  
         this.RightShoulder = RShoulder;  
         this.LeftShoulder = LShoulder ; 
         this.RightHip = RHip; 
         this.LeftHip = LHip ; 
         this.MHead = head ; 
-        this.Torso.add(this.RightShoulder);
-        this.Torso.add(this.LeftShoulder);
-        this.Torso.add(this.RightHip);
-        this.Torso.add(this.LeftHip);
-        this.Torso.add(this.MHead);
+        Torso.add(this.RightShoulder);
+        Torso.add(this.LeftShoulder);
+        Torso.add(this.RightHip);
+        Torso.add(this.LeftHip);
+        Torso.add(this.MHead);
+        this.Torso = Torso ;  
     }  
 }
 
@@ -92,16 +89,31 @@ let cRightHip = new CHip() ;
 let cMHead = new CHead(); 
 let cSwimmer = {}; 
 
-/* ----------------------------- Object Creation ---------------------------- */
- // var test = createDecahedron(1, 1, 1, globalMat);
-// var test = createEye(0.1 , globalMat , "eye");
-cMHead = createHead(1,1,1,
+/* ----------------------------- Object Creation ---------------------------- */ 
+cMHead = createHead(0,1.5,0,
                       1,1,1,
+                      0,0,0 , 
                       yelloMat); 
+
+cLeftHip = createLeg(0.5877 , -0.8090 , 0.0 , 
+                        1.0 , 1.0, 1.0,
+                        1.57 , 0.0, 0.0 , yelloMat); 
+cRightHip = createLeg(-0.5877 , -0.8090 , 0.0 , 
+                        1.0 , 1.0, 1.0,
+                        1.57 , 0.0, 0.0 , yelloMat); 
+var testBody = createTorso(0, 0 , 0 , 
+                            1, 1, 1, 
+                            0 , 0 ,0, 
+                            yelloMat); 
+
 init() ;   
 createShoulder() ;
-scene.add(cMHead.head);   
-scene.add(createAxes(2));  
+scene.add(cLeftHip.Leg);
+scene.add(cRightHip.Leg);
+scene.add(cMHead.head);    
+scene.add(testBody);
+scene.add(createAxes(2)); 
+
 
 
 /* ------------------------------ Light Setting ------------------------------ */
@@ -111,9 +123,8 @@ const intensity = 0.2;
 const ambientLight = new THREE.AmbientLight(color, intensity);
 scene.add(ambientLight);
 /**Point Light */
-var pointLight  = new THREE.PointLight(0xffffff);
-pointLight.position.set(0, 0, 5);
-pointLight  = new THREE.PointLight(0xffffff);
+var pointLight  = new THREE.DirectionalLight(0xffffff);
+pointLight.position.set(0.1, 0.1, 0.1); 
 scene.add(pointLight); 
 
 /* ------------------------------- Rendering ------------------------------- */
@@ -137,8 +148,7 @@ function init()
 {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, .01, 1000);
-
-//var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
+ 
     camera.position.z = 2; 
     renderer = new THREE.WebGLRenderer();
 
@@ -157,15 +167,49 @@ function createArm(sizeX, sizeY, sizeZ,
     scaleX, scaleY, scaleZ, material){}
 
 
-// returns the torso object
-function createTorso(sizeX, sizeY, sizeZ, 
-    scaleX, scaleY, scaleZ, material){}
 
 // Uses the other functions to create the swimmer
 function createSwimmer(sizeX, sizeY, sizeZ, 
     scaleX, scaleY, scaleZ, material){}
 
 
+// returns the torso object BODY
+function createTorso(
+                    PosX, PosY, PosZ, 
+                    scaleX, scaleY, scaleZ,
+                    rotX, rotY, rotZ,   
+                    material)
+{
+    /*Body*/ 
+    var geometry = new THREE.Geometry();
+    var Torso = new THREE.Mesh(geometry , material); 
+    /*Center */
+    Torso.add(createAxes(2));
+    
+    var center = createDecahedron(0.0 , 0.0, 0.0 , 
+                                1.0 , 1.0, 1.0, 
+                                0,  0 , 0 ,
+                                material);
+    Torso.add(center);
+    Torso.name = "Body" ;  
+
+    //Position Setting
+    Torso.position.x = PosX;  
+    Torso.position.y = PosY; 
+    Torso.position.z = PosZ;
+    
+    //Rotation Setting
+    Torso.rotation.x = rotX;  
+    Torso.rotation.y = rotY;  
+    Torso.rotation.z = rotZ;
+
+    //Scale Setting 
+    Torso.scale.x = scaleX; 
+    Torso.scale.y = scaleY; 
+    Torso.scale.z = scaleZ; 
+
+    return Torso ; 
+}
 
 // returns joint axes object
 /**
@@ -178,32 +222,42 @@ function createSwimmer(sizeX, sizeY, sizeZ,
  * @param {Scale Z} scaleZ 
  * @param {Joint Name} name 
  */
-function createJoint(sizeX, sizeY, sizeZ, 
+function createJoint(PosX , PosY, PosZ, 
     scaleX, scaleY, scaleZ, 
+    rotX, rotY, rotZ,
     name)
 {
     var geometry = new THREE.Geometry();
     var material = new THREE.MeshBasicMaterial({color: 0xffff00});
     var Joint = new THREE.Mesh(geometry, material);
 
-    Joint.add(createAxes(2));
-    Joint.position.x = sizeX;  
-    Joint.position.y = sizeY; 
-    Joint.position.z = sizeZ; 
+    Joint.add(createAxes(1));
+    Joint.position.x = PosX;  
+    Joint.position.y = PosY; 
+    Joint.position.z = PosZ; 
 
     Joint.scale.x = scaleX;  
     Joint.scale.y = scaleY; 
     Joint.scale.z = scaleZ;  
+
+    Joint.rotation.x = rotX;  
+    Joint.rotation.y = rotY; 
+    Joint.rotation.z = rotZ;  
+
+    Joint.name = name;  
+
     return Joint; 
 }
 
 // returns the head object
 function createHead(sizeX, sizeY, sizeZ, 
                     scaleX, scaleY, scaleZ, 
+                    rotX, rotY, rotZ,
                     material)
 {
     var Neck = createJoint(0 ,-0.5 ,0 , 
                             0.7 ,0.7 ,0.7 ,
+                            0 , 0 , 0 ,
                             "Neck");
     var LEye = createEye(-0.2, 0.0, 0.2, 
                     1, 1 , 1 , 
@@ -229,12 +283,19 @@ function createHead(sizeX, sizeY, sizeZ,
     geometry.computeFaceNormals();     
     var MHead = new THREE.Mesh(geometry, material);
     MHead.name = "Head" ;  
+
     MHead.position.x = sizeX; 
     MHead.position.y = sizeY; 
     MHead.position.z = sizeZ;   
+
     MHead.scale.x = scaleX;  
     MHead.scale.y = scaleY;  
     MHead.scale.z = scaleZ;   
+
+    MHead.rotation.x = rotX;  
+    MHead.rotation.y = rotY;
+    MHead.rotation.z = rotZ;
+
     /*Add it to sub child */
     MHead.add(Neck);//TODO : tmp variable delete it
     MHead.add(LEye);
@@ -270,7 +331,9 @@ function createEye(PosX , PosY, PosZ ,
 
 // returns decahedron object
 function createDecahedron(PosX, PosY, PosZ,
-                         scaleX, scaleY, scaleZ,  material)
+                         scaleX, scaleY, scaleZ,
+                         RotX , RotY, RotZ,  
+                         material)
 {
     var geometry = new THREE.Geometry();
     geometry.vertices.push(new THREE.Vector3(0,1,0));
@@ -310,11 +373,19 @@ function createDecahedron(PosX, PosY, PosZ,
     object.scale.x = scaleX; 
     object.scale.y = scaleY; 
     object.scale.z = scaleZ;  
+    /*Rotation Setting */
+    object.rotation.x = RotX; 
+    object.rotation.y = RotY; 
+    object.rotation.z = RotZ;  
+
     return object;  
 }
 
 // returns Octahedron object
-function createOctahedron(sizeX, sizeY, sizeZ, material)
+function createOctahedron(PosX , PosY, PosZ,
+                         scaleX, scaleY, scaleZ,
+                         rotX ,rotY, rotZ, 
+                         material)
 {
     var geometry = new THREE.Geometry();
     geometry.vertices.push(new THREE.Vector3(0.3,0,0));
@@ -334,17 +405,88 @@ function createOctahedron(sizeX, sizeY, sizeZ, material)
     geometry.computeFaceNormals();     
     var object = new THREE.Mesh(geometry, material);
     object.name = "Octahedron" ; 
-    object.scale.x = sizeX; 
-    object.scale.y = sizeY; 
-    object.scale.z = sizeZ;  
+
+    object.scale.x = scaleX; 
+    object.scale.y = scaleY; 
+    object.scale.z = scaleZ;  
+
+    object.position.x = PosX;  
+    object.position.y = PosY;  
+    object.position.z = PosZ;
+    
+    object.rotation.x = rotX;  
+    object.rotation.y = rotY;  
+    object.rotation.z = rotZ; 
+
     return object;  
 }
 
 // returns a whole leg
-function createLeg(sizeX, sizeY, sizeZ, 
-    scaleX, scaleY, scaleZ, material)
-{
-    
+function createLeg(PosX, PosY, PosZ, 
+                    scaleX, scaleY, scaleZ,
+                    rotX, rotY, rotZ , 
+                    material)
+{ 
+    var resultLeg = {};  
+    var Leg = new THREE.Object3D(); 
+    var Hip = {} ;
+    var UpperLeg = {} ; 
+    var Knee = {} ; 
+    var LowerLeg = {} ; 
+    var Angle = {} ; 
+    var Foot = {} ; 
+    /*Hip */
+    Hip = createJoint(0, 0,  0, 
+                     1,1 ,1,  
+                     0, 0 , 0,
+                      "Hip"); 
+    /*Upper Leg*/
+    UpperLeg = createOctahedron(0, 0 , 0.5 , 
+                                1,1, 1, 
+                                0, 0,0, 
+                            material) ; 
+    /*Knee*/
+    Knee = createJoint( 0.0 , 0.0 , 1.0 , 
+                        1, 1, 1 , 
+                        0, 0, 0,
+                        "Knee"); 
+    /*Lower Leg*/
+    LowerLeg = createOctahedron(0.0 , 0.0 , 0.5 , 
+                                1,1,1, 
+                                0 , 0, 0 ,
+                                material);
+    /*Angle*/
+    Angle = createJoint(0.0 , 0.0 ,1.0 ,
+                        1,1,1,
+                        0, 0 , 0,
+                        "Angle");
+    /*Foot*/
+    Foot = createRectangle(0.0 , 0.0 , 0.5 , 
+                            1, 1, -1, 
+                            0, 0, 0 , 
+                            material);
+    /*Add it to the sub child */
+    Leg.add(Hip);
+    Hip.add(UpperLeg); 
+    Hip.add(Knee); 
+    Knee.add(LowerLeg);
+    Knee.add(Angle);
+    Angle.add(Foot);
+
+    Leg.position.x = PosX; 
+    Leg.position.y = PosY; 
+    Leg.position.z = PosZ;  
+
+    Leg.scale.x = scaleX;  
+    Leg.scale.y = scaleY;  
+    Leg.scale.z = scaleZ;  
+
+    Leg.rotation.x = rotX;  
+    Leg.rotation.y = rotY; 
+    Leg.rotation.z = rotZ;    
+
+    resultLeg = new CHip(Leg, Hip , UpperLeg , Knee, LowerLeg ,Angle , Foot); 
+    return resultLeg  ; //TODO : delete it 
 }
 
 // 0xffff00
@@ -397,6 +539,48 @@ function createShoulder()
     shoulder.add(upperArm);
     shoulder.add(createAxes(2));  
 }
+
+function createRectangle(
+        PosX, PosY , PosZ,
+        ScaleX,ScaleY, ScaleZ, 
+        RotX , RotY , RotZ, 
+        material
+)
+{
+    var geometry = new THREE.Geometry(); 
+    geometry.vertices = [
+        new THREE.Vector3( -0.3, 0.0 , 0 ),
+        new THREE.Vector3( 0.3, 0.0 , 0 ),
+        new THREE.Vector3( 0.0 , 0.3 , 0 ),
+        new THREE.Vector3( 0.0 , -0.3, 0 ),
+        new THREE.Vector3( 0.0, 0.0, 0.5 )
+    ]; 
+    geometry.faces = [
+        new THREE.Face3( 2, 0,4  ),
+        new THREE.Face3( 1, 2, 4 ),
+        new THREE.Face3( 3 ,1 , 4  ),
+        new THREE.Face3( 0, 3, 4 ),
+        new THREE.Face3( 2, 1, 3 ),
+        new THREE.Face3( 2, 3, 0 )
+    ];    
+    geometry.computeFaceNormals();     
+    var object = new THREE.Mesh(geometry, material);
+
+    object.position.x = PosX; 
+    object.position.y = PosY; 
+    object.position.z = PosZ; 
+
+    object.rotation.x = RotX;  
+    object.rotation.y = RotY; 
+    object.rotation.z = RotZ; 
+
+    object.scale.x = ScaleX;  
+    object.scale.y = ScaleY; 
+    object.scale.z = ScaleZ;  
+
+    return object; 
+} 
+
 
 function handleKeyDown(event)
 {

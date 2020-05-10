@@ -8,19 +8,34 @@
 /* ----------------------- Global Variable Declartion ----------------------- */
 var scene ; 
 var camera;
-var renderer;  
-var shoulder = new THREE.Object3D();
-shoulder.name = "shoulder";
-shoulder.rotation.z = Math.PI / 6;
+var renderer;   
 var hex16Color =  0xffffff;  
 var hex16Yellow = 0xffff00; 
 var hex16Red = 0xff0000;
-var yelloMat = new THREE.MeshLambertMaterial({color: hex16Yellow}); 
-var whiteMat = new THREE.MeshLambertMaterial({color: hex16Color}); 
-var redMat = new THREE.MeshLambertMaterial({color: hex16Red}); 
+
+var globalTurnOn = false;
+var globalEnableAxe = true;  
+var globalEnableLight = true;  
+var yelloMat = new THREE.MeshLambertMaterial({color: hex16Yellow,wireframe: globalTurnOn});  
+var redMat = new THREE.MeshLambertMaterial({color: hex16Red , wireframe: globalTurnOn}); 
 var globalMat = yelloMat; 
-var gloIsWireFrameOn = true; 
- 
+var gloIsWireFrameOn = true;   
+let selectedObject = new THREE.Object3D();
+
+/* ----------------------------- Enum Predefine ----------------------------- */
+const Component = 
+{
+    SHOULDER: 'Shoulder',
+    ELBOW: 'Elbow',
+    WRIST: 'Wrist',
+    HIP: 'Hip',
+    KNEE: 'Knee',
+    ANKLE: 'Ankle',
+    NECK: 'Neck',
+    NONE: 'none'
+}
+let SelectedType  = Component.NONE; 
+
 
 /* ---------------------------- class Declartion ---------------------------- */
 class CShoulder 
@@ -62,21 +77,28 @@ class CHead
     }
 }
 
+class CTorso
+{
+    constructor(Torso,Decahedron, Root)
+    {
+        this.Torso  = Torso ;
+        this.Decahedron = Decahedron; 
+        this.Root   = Root  ; 
+    }
+}
+
+
 class CSwimmer
 {  
-    constructor(Torso, RShoulder , LShoulder , RHip, LHip, head)
-    {  
+    constructor(Swimmer , Torso, RShoulder , LShoulder , RHip, LHip, head)
+    {   
+        this.Swimmer = Swimmer;  
+        this.Torso = Torso ;  
         this.RightShoulder = RShoulder;  
         this.LeftShoulder = LShoulder ; 
         this.RightHip = RHip; 
         this.LeftHip = LHip ; 
-        this.MHead = head ; 
-        Torso.add(this.RightShoulder);
-        Torso.add(this.LeftShoulder);
-        Torso.add(this.RightHip);
-        Torso.add(this.LeftHip);
-        Torso.add(this.MHead);
-        this.Torso = Torso ;  
+        this.MHead = head ;  
     }  
 }
 
@@ -90,8 +112,7 @@ let cRightShoulder = new CShoulder();
 let cLeftHip = new CHip() ; 
 let cRightHip = new CHip() ; 
 let cMHead = new CHead(); 
-let cSwimmer = {}; 
-
+let cTorso = new CTorso();
 /* ----------------------------- Object Creation ---------------------------- */ 
 cMHead = createHead(0,1.5,0,
                       1,1,1,
@@ -103,7 +124,7 @@ cLeftHip = createLeg(0.5877 , -0.8090 , 0.0 ,
 cRightHip = createLeg(-0.5877 , -0.8090 , 0.0 , 
                         1.0 , 1.0, 1.0,
                         1.57 , 0.0, 0.0 , yelloMat); 
-var testBody = createTorso(0, 0 , 0 , 
+cTorso = createTorso(0, 0 , 0 , 
                             1, 1, 1, 
                             0 , 0 ,0, 
                             yelloMat); 
@@ -115,15 +136,13 @@ cRightShoulder = createArm(0.9510,0.3090, 0 ,
                             1, 1,1, 
                             0, 0 ,3.14 ,
                             yelloMat);  
-init() ;   
-// createShoulder() ;
-scene.add(cLeftHip.Leg);
-scene.add(cRightHip.Leg);
-scene.add(cMHead.head);    
-scene.add(testBody);
-scene.add(cRightShoulder.Arm); 
-scene.add(cLeftShoulder.Arm);
-scene.add(createAxes(2)); 
+let cSwimmer = createSwimmer(0 ,0, 0 ,
+                            1,1,1, 
+                            0 ,0 , 0); 
+let globalAxes = createAxes(3);                      
+init() ;     
+scene.add(cSwimmer.Swimmer);
+scene.add(globalAxes); 
 
 
 
@@ -145,16 +164,24 @@ var controls = new THREE.TrackballControls(camera, renderer.domElement);
 controls.addEventListener('change', render);
 animate();  
 
+/**
+ * Render scene
+ */
 function render() {
     renderer.render(scene, camera); 
 }
 
+/**
+ * Animate the Object
+ */
 function animate() {
     render(); 
     requestAnimationFrame(animate);
     controls.update();
-}
-
+} 
+/**
+ * Init the base camera and the rendering Component
+ */
 function init()
 {
     scene = new THREE.Scene();
@@ -171,14 +198,53 @@ function init()
 
     document.onkeydown = handleKeyDown;
     document.onkeyup = handleKeyUp;
-} 
+}   
 
-
-
+/**
+ * 
+ * @param {The Transform X} PosX 
+ * @param {The Transform Y} PosY 
+ * @param {The Transform Z} PosZ 
+ * @param {The Scale X } ScaleX 
+ * @param {Scale Y} ScaleY 
+ * @param {Scale Z} ScaleZ 
+ * @param {Rotation X} RotX 
+ * @param {Rotation Y} RotY 
+ * @param {Rotatoin Z} RotZ 
+ * @param {Material} material 
+ */
 // Uses the other functions to create the swimmer
-function createSwimmer(sizeX, sizeY, sizeZ, 
-    scaleX, scaleY, scaleZ, material)
-    {}
+function createSwimmer(PosX, PosY, PosZ, 
+                        ScaleX, ScaleY, ScaleZ,
+                        RotX , RotY, RotZ)
+{  
+    var resultSwimmer = {} ; 
+    var Swimmer = new THREE.Object3D(); 
+    Swimmer.add(cTorso.Torso);
+    Swimmer.add(cLeftHip.Leg);
+    Swimmer.add(cRightHip.Leg);
+    Swimmer.add(cLeftShoulder.Arm);
+    Swimmer.add(cRightShoulder.Arm);
+    Swimmer.add(cMHead.head);
+
+    //Position Setting 
+    Swimmer.position.x = PosX; 
+    Swimmer.position.y = PosY;  
+    Swimmer.position.z = PosZ;  
+    //Rotation Setting
+    Swimmer.rotation.x = RotX; 
+    Swimmer.rotation.y = RotY;
+    Swimmer.rotation.z = RotZ; 
+    //Scale Setting
+    Swimmer.scale.x = ScaleX ; 
+    Swimmer.scale.y = ScaleY ; 
+    Swimmer.scale.z = ScaleZ ;  
+
+    resultSwimmer = new CSwimmer(Swimmer, cTorso , cRightShoulder 
+                                ,cLeftShoulder , cRightHip , cLeftHip , cMHead); 
+
+    return resultSwimmer;  
+}
 
 
 // returns the torso object BODY
@@ -187,17 +253,24 @@ function createTorso(
                     scaleX, scaleY, scaleZ,
                     rotX, rotY, rotZ,   
                     material)
-{
+{ 
+    var resultTorso = {} ; 
     /*Body*/ 
     var geometry = new THREE.Geometry();
     var Torso = new THREE.Mesh(geometry , material); 
     /*Center */
-    Torso.add(createAxes(2));
+    /*Joint */
+    var Root =createAxes(2);  
+    Root.name = "axes"
     
+
     var center = createDecahedron(0.0 , 0.0, 0.0 , 
                                 1.0 , 1.0, 1.0, 
                                 0,  0 , 0 ,
                                 material);
+    center.name = "Torso"
+
+    Torso.add(Root);
     Torso.add(center);
     Torso.name = "Body" ;  
 
@@ -214,9 +287,11 @@ function createTorso(
     //Scale Setting 
     Torso.scale.x = scaleX; 
     Torso.scale.y = scaleY; 
-    Torso.scale.z = scaleZ; 
+    Torso.scale.z = scaleZ;   
 
-    return Torso ; 
+    resultTorso = new CTorso(Torso , center , Root);
+
+    return resultTorso ; 
 }
 
 // returns joint axes object
@@ -633,17 +708,262 @@ function createRectangle(
 
 
 function handleKeyDown(event)
-{
-    switch (event.keyCode) {
-    case 37:
-        scene.rotation.z += 1 * Math.PI / 180;
-        break;
-    case 39:
-        scene.rotation.z -= 1 * Math.PI / 180;
-        break;
+{ 
+
+    switch (event.keyCode) 
+    { 
+        /*Arrow Key */
+        case 37: //LEFT 
+            if(SelectedType == Component.SHOULDER)
+            {   
+                alert("Left Arm Shoulder ");
+                selectedObject = cLeftShoulder.Shoulder;
+            }  
+            else if(SelectedType == Component.ELBOW)
+            {
+                alert("Left Arm Elbow");
+                selectedObject = cLeftShoulder.Elbow ; 
+            }
+            else if(SelectedType == Component.WRIST)
+            {
+                alert("Left Arm Wrist");
+                selectedObject = cLeftShoulder.Wrist;  
+            }
+            else if(SelectedType == Component.HIP)
+            {  
+                alert("Left Leg Hip");
+                selectedObject = cLeftHip.Hip;  
+            }
+            else if(SelectedType == Component.KNEE)
+            {
+                alert("Left Leg Knee");
+                selectedObject = cLeftHip.Knee; 
+            }
+            else if(SelectedType == Component.ANKLE)
+            {
+                alert("Left Leg Ankle");
+                selectedObject = cLeftHip.Ankle ; 
+            }
+            else if(SelectedType == Component.NECK)
+            {
+                alert("Middle Neck");
+                selectedObject = cMHead.neck ; 
+            }
+            break; 
+        case 39://RIHGT 
+            if(SelectedType == Component.SHOULDER)
+            {   
+                alert("Right Arm Shoulder ");
+                selectedObject = cRightShoulder.Shoulder;
+            }  
+            else if(SelectedType == Component.ELBOW)
+            {
+                alert("Right Arm Elbow");
+                selectedObject = cRightShoulder.Elbow ; 
+            }
+            else if(SelectedType == Component.WRIST)
+            {
+                alert("Right Arm Wrist");
+                selectedObject = cRightShoulder.Wrist;  
+            }
+            else if(SelectedType == Component.HIP)
+            {  
+                alert("Right Leg Hip");
+                selectedObject = cRightHip.Hip;  
+            }
+            else if(SelectedType == Component.KNEE)
+            {
+                alert("Right Leg Knee");
+                selectedObject = cRightHip.Knee; 
+            }
+            else if(SelectedType == Component.ANKLE)
+            {
+                alert("Right Leg Ankle");
+                selectedObject = cRightHip.Ankle ; 
+            }
+            else if(SelectedType == Component.NECK)
+            {
+                alert("Middle Neck");
+                selectedObject = cMHead.neck ; 
+            }
+            break; 
+        case 40://DOWN
+            // alert('down');
+            if(SelectedType == Component.SHOULDER)
+            {
+                //[-90,90]
+                if(selectedObject.rotation.z <= 0.785 &&selectedObject.rotation.z >= -0.785)
+                 {
+                     alert("down  shoulder");
+                         selectedObject.rotation.z -= 0.1;
+                }
+            }
+            else if(SelectedType == Component.ELBOW)
+            { 
+                //[0,180]
+                if(selectedObject.rotation.z <= 1.57 &&selectedObject.rotation.z >= 0.0)
+                     selectedObject.rotation.z -= 0.1;
+            }
+            else if(SelectedType == Component.WRIST)
+            {
+                //[-90,90]
+                if(selectedObject.rotation.z <= 0.785 &&selectedObject.rotation.z >= -0.785)
+                     selectedObject.rotation.z -= 0.1; 
+            }
+            else if(SelectedType == Component.HIP)
+            {
+                //[-90,90]
+                if(selectedObject.rotation.x <= 0.785 &&selectedObject.rotation.x >= -0.785)
+                    selectedObject.rotation.x -= 0.1;
+            }
+            else if(SelectedType == Component.KNEE)
+            {
+                //[-90,0]
+                if(selectedObject.rotation.x <= 0.0 &&selectedObject.rotation.x >= -0.785)
+                    selectedObject.rotation.x -= 0.1; 
+            }
+            else if(SelectedType == Component.ANKLE)
+            {
+                //[0,90]
+                if(selectedObject.rotation.x <= 0.785 &&selectedObject.rotation.x >= 0.0)
+                    selectedObject.rotation.x -= 0.1; 
+            }
+            else if(SelectedType == Component.Neck)
+            {
+                //[-90,90]
+                if(selectedObject.rotation.y <= 0.785 &&selectedObject.rotation.y >= -0.785)
+                selectedObject.rotation.y -= 0.1;
+            }
+            break; 
+        case 38://UP
+            // alert('Up');
+            if(SelectedType == Component.SHOULDER)
+            {
+                //[-90,90]
+                if(selectedObject.rotation.z <= 0.785 &&selectedObject.rotation.z >= -0.785)
+                     selectedObject.rotation.z += 0.1;
+            }
+            else if(SelectedType == Component.ELBOW)
+            { 
+                //[0,180]
+                if(selectedObject.rotation.z <= 1.57 &&selectedObject.rotation.z >= 0.0)
+                     selectedObject.rotation.z += 0.1;
+            }
+            else if(SelectedType == Component.WRIST)
+            {
+                //[-90,90]
+                if(selectedObject.rotation.z <= 0.785 &&selectedObject.rotation.z >= -0.785)
+                     selectedObject.rotation.z += 0.1; 
+            }
+            else if(SelectedType == Component.HIP)
+            {
+                //[-90,90]
+                if(selectedObject.rotation.x <= 0.785 &&selectedObject.rotation.x >= -0.785)
+                    selectedObject.rotation.x += 0.1;
+            }
+            else if(SelectedType == Component.KNEE)
+            {
+                //[-90,0]
+                if(selectedObject.rotation.x <= 0.0 &&selectedObject.rotation.x >= -0.785)
+                    selectedObject.rotation.x += 0.1; 
+            }
+            else if(SelectedType == Component.ANKLE)
+            {
+                //[0,90]
+                if(selectedObject.rotation.x <= 0.785 &&selectedObject.rotation.x >= 0.0)
+                    selectedObject.rotation.x += 0.1; 
+            }
+            else if(SelectedType == Component.Neck)
+            {
+                //[-90,90]
+                if(selectedObject.rotation.y <= 0.785 &&selectedObject.rotation.y >= -0.785)
+                selectedObject.rotation.y += 0.1;
+            }
+            break;  
+        /*Key bindings for joint manipulation are up and down arrows to increase/decrease angles*/
+        case 83: // Shoulder	s	z	[-90,90]
+            alert('Shoulder'); 
+            SelectedType = Component.SHOULDER ;
+            break; 
+        case 69://Elbow	e	z	[0,180]
+            alert('Elbow');
+            SelectedType = Component.ELBOW;  
+            break; 
+        case 87://Wrist	w	z	[-90,90]
+            alert('Wrist');
+            SelectedType = Component.WRIST;  
+            break; 
+        case 72://Hip	h	x	[-90,90]
+            alert("Hip");    
+            SelectedType = Component.HIP;  
+            break; 
+        case 75://Knee	k	x	[-90,0]
+            alert('Knee');
+            SelectedType = Component.KNEE;  
+            break;
+        case 65://Ankle	a	x	[0,90] 
+            alert('Ankle');
+            SelectedType = Component.ANKLE ; 
+            break; 
+        case 78: //Neck	n	y	[-90,90]
+            alert('Neck');
+            SelectedType = Component.NECK; 
+            break;     
+
+        /*There are to be three rendering bindings: */
+        case 77: // 'm' wireframe/filled mode  
+            if(globalTurnOn == true)
+                globalTurnOn = false; 
+            else 
+                globalTurnOn = true ;
+            TurnOffWireframe(globalTurnOn); 
+            break;   
+        case 76 ://l	basic/lighting 
+            if(globalEnableLight == true)
+                globalEnableLight = false; 
+            else 
+                globalEnableLight = true;  
+            TurnOffLighting(globalEnableLight);
+            break;
+        case 88 : //x	enable/disable axes 
+            if(globalEnableAxe == false)
+                globalEnableAxe = true; 
+            else 
+                globalEnableAxe = false;     
+            TurnAxes(globalEnableAxe);
+
+            break; 
     }
 }
 function handleKeyUp(event)
-{
-    // Details go here
+{ 
+} 
+
+function TurnOffLighting(reuslt)
+{ 
+    pointLight.visible = reuslt; 
+} 
+
+function TurnOffWireframe(result)
+{ 
+    if(scene !=null)
+    {
+        scene.traverse
+        ( 
+            function (child) 
+            {
+                if (child instanceof THREE.Mesh)
+                    child.material.wireframe = result;
+            }
+        );
+    }
+}
+function TurnAxes(result)
+{  
+    scene.traverse( function ( object ) 
+    { 
+        if(object.name == "axes")
+            object.visible = result;  
+    } );
+    globalAxes.visible = result ; 
 }

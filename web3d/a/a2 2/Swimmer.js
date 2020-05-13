@@ -1,7 +1,18 @@
-/**
- * cube.js 
- * A simple Three.js program which draws a cube
- */
+/*
+
+
+
+                ____  _            _ _         ____ _
+               / ___|| |__   __ _ (_|_) ___   / ___| |__   ___ _ __
+               \___ \| '_ \ / _` || | |/ _ \ | |   | '_ \ / _ \ '_ \
+                ___) | | | | (_| || | |  __/ | |___| | | |  __/ | | |
+               |____/|_| |_|\__,_|/ |_|\___|  \____|_| |_|\___|_| |_|
+                                |__/
+Student Name : Shajie Chen 
+Student ID : s3582098
+Student Email Address : s3582098@student.rmit.edu.au 
+Subject : Web3D Assignment 2 
+*/
 
 "use strict"; 
 
@@ -35,8 +46,13 @@ const Component =
     NONE: 'none'
 }
 let SelectedType  = Component.NONE; 
-
-
+const Dir = 
+{
+    LEFT: 'Left' , 
+    RIGHT: 'Right',
+    NONE: 'none'
+}
+let SelectedDir = Dir.NONE ; 
 /* ---------------------------- class Declartion ---------------------------- */
 class CShoulder 
 { 
@@ -118,10 +134,10 @@ cMHead = createHead(0,1.5,0,
                       1,1,1,
                       0,0,0 , 
                       yelloMat);  
-cLeftHip = createLeg(0.5877 , -0.8090 , 0.0 , 
+cRightHip = createLeg(0.5877 , -0.8090 , 0.0 , 
                         1.0 , 1.0, 1.0,
                         1.57 , 0.0, 0.0 , yelloMat); 
-cRightHip = createLeg(-0.5877 , -0.8090 , 0.0 , 
+cLeftHip = createLeg(-0.5877 , -0.8090 , 0.0 , 
                         1.0 , 1.0, 1.0,
                         1.57 , 0.0, 0.0 , yelloMat); 
 cTorso = createTorso(0, 0 , 0 , 
@@ -383,6 +399,7 @@ function createHead(sizeX, sizeY, sizeZ,
     MHead.add(Neck);
     MHead.add(LEye);
     MHead.add(REye);
+    
 
     cMHead.head = MHead;  
     cMHead.neck = Neck;  
@@ -463,7 +480,19 @@ function createDecahedron(PosX, PosY, PosZ,
 
     return object;  
 }
-
+/**
+ * 
+ * @param {Transform X} PosX 
+ * @param {Transform Y} PosY 
+ * @param {Transform Z} PosZ 
+ * @param {Transform Scale X} scaleX 
+ * @param {Transform Scale Y} scaleY 
+ * @param {Transform Scale Z} scaleZ 
+ * @param {Transform Rotation X} rotX 
+ * @param {Transform Rotation Y} rotY 
+ * @param {Transform Rotation Z} rotZ 
+ * @param {Material} material 
+ */
 // returns Octahedron object
 function createOctahedron(PosX , PosY, PosZ,
                          scaleX, scaleY, scaleZ,
@@ -503,8 +532,19 @@ function createOctahedron(PosX , PosY, PosZ,
 
     return object;  
 }
-
-
+/**
+ * 
+ * @param {Transform X} PosX 
+ * @param {Transform Y} PosY 
+ * @param {Transform Z} PosZ 
+ * @param {Transform Scale x} ScaleX 
+ * @param {Transform Scale y} ScaleY 
+ * @param {Transform Scale z} ScaleZ 
+ * @param {Transform Rotation x} RotX 
+ * @param {Transform Rotation y} RotY 
+ * @param {Transform Rotation z} RotZ 
+ * @param {Material} material 
+ */
 // returns a whole arm
 function createArm(PosX, PosY, PosZ, 
     ScaleX, ScaleY, ScaleZ,
@@ -639,7 +679,7 @@ function createLeg(PosX, PosY, PosZ,
     Leg.rotation.z = rotZ;    
 
     resultLeg = new CHip(Leg, Hip , UpperLeg , Knee, LowerLeg ,Angle , Foot); 
-    return resultLeg  ; //TODO : delete it 
+    return resultLeg  ; 
 }
 
 // 0xffff00
@@ -664,7 +704,19 @@ function createCube(scaleX , scaleY, scaleZ,
     object.scale.z = scaleZ;  
     return object;  
 }   
-
+/**
+ * Creating Rectangle 
+ * @param {Transform X} PosX 
+ * @param {Transform Y} PosY 
+ * @param {Transform Z} PosZ 
+ * @param {Transform Scale X} ScaleX 
+ * @param {Transform Scale Y} ScaleY 
+ * @param {Transform Scale Z} ScaleZ 
+ * @param {Transform Rotation X} RotX 
+ * @param {Transform Rotation Y} RotY 
+ * @param {Transform Rotation Z} RotZ 
+ * @param {Material} material 
+ */
 function createRectangle(
         PosX, PosY , PosZ,
         ScaleX,ScaleY, ScaleZ, 
@@ -718,36 +770,43 @@ function handleKeyDown(event)
             {   
                 alert("Left Arm Shoulder ");
                 selectedObject = cLeftShoulder.Shoulder;
+                SelectedDir = Dir.LEFT; 
             }  
             else if(SelectedType == Component.ELBOW)
             {
                 alert("Left Arm Elbow");
                 selectedObject = cLeftShoulder.Elbow ; 
+                SelectedDir = Dir.LEFT; 
             }
             else if(SelectedType == Component.WRIST)
             {
                 alert("Left Arm Wrist");
-                selectedObject = cLeftShoulder.Wrist;  
+                selectedObject = cLeftShoulder.Wrist;
+                SelectedDir = Dir.LEFT;   
             }
             else if(SelectedType == Component.HIP)
             {  
                 alert("Left Leg Hip");
                 selectedObject = cLeftHip.Hip;  
+                SelectedDir = Dir.LEFT; 
             }
             else if(SelectedType == Component.KNEE)
             {
                 alert("Left Leg Knee");
                 selectedObject = cLeftHip.Knee; 
+                SelectedDir = Dir.LEFT; 
             }
             else if(SelectedType == Component.ANKLE)
             {
                 alert("Left Leg Ankle");
                 selectedObject = cLeftHip.Ankle ; 
+                SelectedDir = Dir.LEFT; 
             }
             else if(SelectedType == Component.NECK)
             {
                 alert("Middle Neck");
-                selectedObject = cMHead.neck ; 
+                selectedObject = cMHead.head ; 
+                SelectedDir = Dir.LEFT; 
             }
             break; 
         case 39://RIHGT 
@@ -755,36 +814,43 @@ function handleKeyDown(event)
             {   
                 alert("Right Arm Shoulder ");
                 selectedObject = cRightShoulder.Shoulder;
+                SelectedDir = Dir.RIGHT; 
             }  
             else if(SelectedType == Component.ELBOW)
             {
                 alert("Right Arm Elbow");
                 selectedObject = cRightShoulder.Elbow ; 
+                SelectedDir = Dir.RIGHT;
             }
             else if(SelectedType == Component.WRIST)
             {
                 alert("Right Arm Wrist");
                 selectedObject = cRightShoulder.Wrist;  
+                SelectedDir = Dir.RIGHT;
             }
             else if(SelectedType == Component.HIP)
             {  
                 alert("Right Leg Hip");
                 selectedObject = cRightHip.Hip;  
+                SelectedDir = Dir.RIGHT;
             }
             else if(SelectedType == Component.KNEE)
             {
                 alert("Right Leg Knee");
                 selectedObject = cRightHip.Knee; 
+                SelectedDir = Dir.RIGHT;
             }
             else if(SelectedType == Component.ANKLE)
             {
                 alert("Right Leg Ankle");
-                selectedObject = cRightHip.Ankle ; 
+                selectedObject = cRightHip.Ankle ;
+                SelectedDir = Dir.RIGHT; 
             }
             else if(SelectedType == Component.NECK)
             {
                 alert("Middle Neck");
-                selectedObject = cMHead.neck ; 
+                selectedObject = cMHead.head ; 
+                SelectedDir = Dir.RIGHT;
             }
             break; 
         case 40://DOWN
@@ -792,122 +858,249 @@ function handleKeyDown(event)
             if(SelectedType == Component.SHOULDER)
             {
                 //[-90,90]
-                if(selectedObject.rotation.z <= 0.785 &&selectedObject.rotation.z >= -0.785)
-                 {
-                     alert("down  shoulder");
-                         selectedObject.rotation.z -= 0.1;
+                if(SelectedDir == Dir.LEFT){
+                    if(selectedObject.rotation.z < 1.57)
+                        selectedObject.rotation.z += 0.1;
                 }
+                else if(SelectedDir == Dir.RIGHT)
+                    if(selectedObject.rotation.z > -1.57)
+                    selectedObject.rotation.z -= 0.1;
             }
             else if(SelectedType == Component.ELBOW)
             { 
                 //[0,180]
-                if(selectedObject.rotation.z <= 1.57 &&selectedObject.rotation.z >= 0.0)
-                     selectedObject.rotation.z -= 0.1;
+                if(SelectedDir == Dir.RIGHT)
+                {    
+                    if(selectedObject.rotation.z >= 0.0)
+                        selectedObject.rotation.z -= 0.1;
+                }
+                else if(SelectedDir == Dir.LEFT)
+                 { 
+                    if(selectedObject.rotation.z < 0)
+                        {   
+                            selectedObject.rotation.z += 0.1;
+                    }
+                 } 
             }
             else if(SelectedType == Component.WRIST)
             {
-                //[-90,90]
-                if(selectedObject.rotation.z <= 0.785 &&selectedObject.rotation.z >= -0.785)
-                     selectedObject.rotation.z -= 0.1; 
+                //[-90,90] 
+                if(SelectedDir == Dir.RIGHT)
+                {    
+                    if(selectedObject.rotation.z >= -1.57)
+                        selectedObject.rotation.z -= 0.1;
+                }
+                else if(SelectedDir == Dir.LEFT)
+                 { 
+                    if(selectedObject.rotation.z < 1.57)
+                        {   
+                            selectedObject.rotation.z += 0.1;
+                    }
+                 } 
             }
             else if(SelectedType == Component.HIP)
-            {
-                //[-90,90]
-                if(selectedObject.rotation.x <= 0.785 &&selectedObject.rotation.x >= -0.785)
-                    selectedObject.rotation.x -= 0.1;
+            { 
+                // h	x	[-90,90] 
+                if(SelectedDir == Dir.RIGHT)
+                {     
+                    if(selectedObject.rotation.x <= 1.57 )
+                    {
+                        selectedObject.rotation.x += 0.1;
+                    }
+                }
+                else if(SelectedDir == Dir.LEFT)
+                 {   
+                    if(selectedObject.rotation.x < 1.57)
+                    {   
+                            selectedObject.rotation.x += 0.1;
+                    }
+                 } 
             }
             else if(SelectedType == Component.KNEE)
             {
-                //[-90,0]
-                if(selectedObject.rotation.x <= 0.0 &&selectedObject.rotation.x >= -0.785)
-                    selectedObject.rotation.x -= 0.1; 
+                //[-90,0] 
+                if(SelectedDir == Dir.RIGHT)
+                {     
+                    if(selectedObject.rotation.x <= 1.57 )
+                    {
+                        selectedObject.rotation.x += 0.1;
+                    }
+                }
+                else if(SelectedDir == Dir.LEFT)
+                 {   
+                    if(selectedObject.rotation.x <= 1.57)
+                    {   
+                            selectedObject.rotation.x += 0.1;
+                    }
+                 } 
             }
             else if(SelectedType == Component.ANKLE)
             {
                 //[0,90]
-                if(selectedObject.rotation.x <= 0.785 &&selectedObject.rotation.x >= 0.0)
-                    selectedObject.rotation.x -= 0.1; 
+                //a	x	[0,90] 
+                if(SelectedDir == Dir.RIGHT)
+                {     
+                    if(selectedObject.rotation.x < -0.1 )
+                    {
+                        selectedObject.rotation.x += 0.1;
+                    }
+                }
+                else if(SelectedDir == Dir.LEFT)
+                 {   
+                    if(selectedObject.rotation.x < -0.1)
+                    {   
+                            selectedObject.rotation.x += 0.1;
+                    }
+                 } 
             }
-            else if(SelectedType == Component.Neck)
+            else if(SelectedType == Component.NECK)
             {
-                //[-90,90]
-                if(selectedObject.rotation.y <= 0.785 &&selectedObject.rotation.y >= -0.785)
-                selectedObject.rotation.y -= 0.1;
+                //[-90,90] 
+                if(selectedObject.rotation.y < 1.57)
+                {   
+                        selectedObject.rotation.y += 0.1;
+                }
             }
             break; 
         case 38://UP
             // alert('Up');
             if(SelectedType == Component.SHOULDER)
             {
-                //[-90,90]
-                if(selectedObject.rotation.z <= 0.785 &&selectedObject.rotation.z >= -0.785)
-                     selectedObject.rotation.z += 0.1;
+                //[-90,90] 
+                if(SelectedDir == Dir.LEFT ){
+                    if(selectedObject.rotation.z >= -1.57)
+                        selectedObject.rotation.z -= 0.1;
+                }
+                else if(SelectedDir == Dir.RIGHT) 
+                    if(selectedObject.rotation.z <= 1.57)
+                        selectedObject.rotation.z += 0.1;
+
             }
             else if(SelectedType == Component.ELBOW)
             { 
                 //[0,180]
-                if(selectedObject.rotation.z <= 1.57 &&selectedObject.rotation.z >= 0.0)
-                     selectedObject.rotation.z += 0.1;
+                if(SelectedDir == Dir.RIGHT){
+                    if(selectedObject.rotation.z <= 3.14 )
+                        selectedObject.rotation.z += 0.1;
+                }else if(SelectedDir == Dir.LEFT){
+                    if(selectedObject.rotation.z > -3.14 )
+                     {
+                        selectedObject.rotation.z -= 0.1;
+                     }
+                }
             }
             else if(SelectedType == Component.WRIST)
             {
-                //[-90,90]
-                if(selectedObject.rotation.z <= 0.785 &&selectedObject.rotation.z >= -0.785)
-                     selectedObject.rotation.z += 0.1; 
+                //[-90,90] 
+                if(SelectedDir == Dir.RIGHT){
+                    if(selectedObject.rotation.z <= 1.57 )
+                        selectedObject.rotation.z += 0.1;
+                }else if(SelectedDir == Dir.LEFT){
+                    if(selectedObject.rotation.z > -1.57 )
+                     {
+                        selectedObject.rotation.z -= 0.1;
+                     }
+                }
             }
             else if(SelectedType == Component.HIP)
             {
-                //[-90,90]
-                if(selectedObject.rotation.x <= 0.785 &&selectedObject.rotation.x >= -0.785)
-                    selectedObject.rotation.x += 0.1;
+                //[-90,90]  
+                if(SelectedDir == Dir.RIGHT){
+
+                    if(selectedObject.rotation.x >= -1.57)
+                    { 
+                        selectedObject.rotation.x -= 0.1;
+                    }
+                }else if(SelectedDir == Dir.LEFT){
+
+                    if(selectedObject.rotation.x > -1.57 )
+                    {
+                       selectedObject.rotation.x -= 0.1;
+                    }
+                }
             }
             else if(SelectedType == Component.KNEE)
             {
                 //[-90,0]
-                if(selectedObject.rotation.x <= 0.0 &&selectedObject.rotation.x >= -0.785)
-                    selectedObject.rotation.x += 0.1; 
+                // k	x	[-90,0]
+                if(SelectedDir == Dir.RIGHT){ 
+                    if(selectedObject.rotation.x >= 0.1)
+                    { 
+                        selectedObject.rotation.x -= 0.1;
+                    }
+                }else if(SelectedDir == Dir.LEFT){
+
+                    if(selectedObject.rotation.x >= 0.1 )
+                    {
+                       selectedObject.rotation.x -= 0.1;
+                    }
+                }
             }
             else if(SelectedType == Component.ANKLE)
             {
-                //[0,90]
-                if(selectedObject.rotation.x <= 0.785 &&selectedObject.rotation.x >= 0.0)
-                    selectedObject.rotation.x += 0.1; 
+                //[0,90]  
+                // a	x	[0,90]
+                if(SelectedDir == Dir.LEFT )
+                {
+                    if(selectedObject.rotation.x >= -1.57)
+                    {   
+                        selectedObject.rotation.x -= 0.1;
+                    }
+                }
+                else if(SelectedDir == Dir.RIGHT) 
+                {    
+                    if(selectedObject.rotation.x >= -1.57)
+                    {    
+                        selectedObject.rotation.x -= 0.1;
+                    }
+                }
             }
-            else if(SelectedType == Component.Neck)
+            else if(SelectedType == Component.NECK)
             {
-                //[-90,90]
-                if(selectedObject.rotation.y <= 0.785 &&selectedObject.rotation.y >= -0.785)
-                selectedObject.rotation.y += 0.1;
+                //[-90,90]  
+                //n	y	[-90,90]  
+                if(selectedObject.rotation.y >= -1.57)
+                {   
+                    selectedObject.rotation.y -= 0.1;
+                } 
             }
             break;  
         /*Key bindings for joint manipulation are up and down arrows to increase/decrease angles*/
         case 83: // Shoulder	s	z	[-90,90]
             alert('Shoulder'); 
             SelectedType = Component.SHOULDER ;
+            SelectedDir = Dir.NONE; 
             break; 
         case 69://Elbow	e	z	[0,180]
             alert('Elbow');
             SelectedType = Component.ELBOW;  
+            SelectedDir = Dir.NONE; 
             break; 
         case 87://Wrist	w	z	[-90,90]
             alert('Wrist');
-            SelectedType = Component.WRIST;  
+            SelectedType = Component.WRIST;
+            SelectedDir = Dir.NONE;   
             break; 
         case 72://Hip	h	x	[-90,90]
             alert("Hip");    
-            SelectedType = Component.HIP;  
+            SelectedType = Component.HIP; 
+            SelectedDir = Dir.NONE;  
             break; 
         case 75://Knee	k	x	[-90,0]
             alert('Knee');
             SelectedType = Component.KNEE;  
+            SelectedDir = Dir.NONE; 
             break;
         case 65://Ankle	a	x	[0,90] 
             alert('Ankle');
             SelectedType = Component.ANKLE ; 
+            SelectedDir = Dir.NONE; 
             break; 
         case 78: //Neck	n	y	[-90,90]
             alert('Neck');
-            SelectedType = Component.NECK; 
+            SelectedType = Component.NECK;   
+            SelectedDir = Dir.LEFT; 
+            selectedObject = cMHead.head ; 
             break;     
 
         /*There are to be three rendering bindings: */
